@@ -1,0 +1,25 @@
+<style>
+  .container {
+    margin-top: 50px;
+  }
+</style>
+
+<div class="container">
+  <div class="header clearfix">
+    <nav>
+      <ul class="nav nav-pills pull-right">
+        <li role="presentation" class="{{isActivePage "select" activePage}}"><a href="?p=select">Auswählen</a></li>
+        <li role="presentation" class="{{isActivePage "upload" activePage}}"><a href="?p=upload">Hochladen</a></li>
+      </ul>
+    </nav>
+    <h2 class="text-muted">Dashboard</h2>
+  </div>
+
+  {{#if (isActivePage "select" activePage) }}
+    {{> select}}
+  {{else}}
+    {{> upload}}
+  {{/if}}
+
+
+</div>

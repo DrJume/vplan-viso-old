@@ -1,0 +1,20 @@
+{
+  "name": "manos_vplan",
+  "version": "1.0.0",
+  "description": "Vertretungsplan CMS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "DrJume",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-handlebars": "^3.0.0",
+    "moment": "^2.15.2",
+    "multer": "^1.2.0",
+    "nedb": "^1.8.0",
+    "xml2js": "^0.4.17"
+  }
+}

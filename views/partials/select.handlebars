@@ -1,0 +1,79 @@
+<style>
+  #selectionDisplay{
+    font-style: italic;
+    color: #e43232;
+  }
+</style>
+
+<div class="jumbotron">
+  <h3>Vertretungsplan auswählen</h3>
+  <br>
+  <select id="selection">
+    {{#each vplanList}}
+      <option value="{{this._id}}">{{this.filename}}</option>
+    {{/each}}
+  </select>
+  <button type="button" id="delete" class="btn btn-xs btn-danger"><i class="fa fa-lg fa-trash" aria-hidden="true"></i> Auswahl löschen</button>
+  <br>
+  <br>
+  <button type="button" class="btn btn-success" id="select"><i class="fa fa-lg fa-check-circle" aria-hidden="true"></i> Auswählen</button>
+
+
+  <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h4 class="modal-title">Bestätigung</h4>
+       </div>
+       <div class="modal-body">
+         <p>Soll die Auswahl <span id="selectionDisplay"></span> gelöscht werden?</p>
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-danger" data-dismiss="modal">Nein</button>
+         <button type="button" class="btn btn-success" id="confirm">Ja</button>
+       </div>
+     </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+</div>
+
+<script type="text/javascript">
+  $('#confirmDelete').modal({
+    keyboard: false,
+    show: false,
+    backdrop: "static"
+  });
+
+  $('#delete').click(function(event) {
+    $('#selectionDisplay').html($('#selection option:selected').html());
+    $('#confirmDelete').modal('show');
+    $('#confirm').click(function(event) {
+      $('#confirmDelete').modal('hide');
+      $.ajax({
+        method: "DELETE",
+        url: "/file",
+        data: {
+          id: $('#selection option:selected').val(),
+          name: $('#selection option:selected').text().trim()
+        }
+      }).done(function(msg) {
+        console.log(msg);
+        location.reload(true);
+      });
+    });
+  });
+
+  $('#select').click(function(event) {
+    $.ajax({
+      method: "PUT",
+      url: "/file",
+      data: {
+        id: $('#selection option:selected').val()
+      }
+    }).done(function(msg) {
+      console.log(msg);
+      //location.reload(true);
+    });
+  });
+</script>
