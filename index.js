@@ -6,7 +6,7 @@ var app = express();
 var Datastore = require('nedb');
 var db = new Datastore({ filename: 'db/files.db', autoload: true });
 var fs = require('fs');
-xml2js = require('xml2js');
+var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
 var xmlData;
 var timeParameters;
