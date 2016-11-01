@@ -8,7 +8,7 @@ var db = new Datastore({ filename: 'db/files.db', autoload: true });
 var fs = require('fs');
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
-var xmlData;
+var heute, morgen;
 var timeParameters;
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -65,8 +65,8 @@ app.use(bodyParser.json());
 
 app.use('/public', express.static('public'));
 
-function readVplan() {
-  db.findOne({ active: true }, function (err, doc) {
+function readVplan(forDay) {
+  db.findOne({ forDay: forDay }, function (err, doc) {
     if (err) {
       console.log(err);
       return;
@@ -80,7 +80,21 @@ function readVplan() {
           console.log(err);
           return;
         }
-        xmlData = result;
+        switch (forDay) {
+          case "heute": {
+            heute = result;
+            console.log("heute");
+            break;
+          }
+          case "morgen": {
+            morgen = result;
+            console.log("morgen");
+            break;
+          }
+          default: {
+            return;
+          }
+        }
       });
     });
   });
@@ -101,7 +115,7 @@ app.post('/file', function (req, res) {
     }
     db.insert({
       filename: req.file.filename,
-      active: false
+      forDay: null
     }, function (err) {
       if (err) {
         console.log(err);
@@ -137,20 +151,32 @@ app.get('/file', function (req, res) {
 });
 
 app.put('/file', function (req, res) {
-  db.update({ active: true }, { $set: { active: false } }, function (err) {
+  db.update({ forDay: { $ne: null } }, { $set: { forDay: null } }, function (err) {
     if (err) {
       res.send("ERROR");
       console.log(err);
       return;
     }
-    db.update({ _id: req.body.id }, { $set: { active: true } }, function (err) {
+    db.update({ _id: req.body.id }, { $set: { forDay: req.body.forDay } }, function (err) {
       if (err) {
         res.send("ERROR");
         console.log(err);
         return;
       }
-      readVplan();
-      res.send("VPLAN_SELECTED");
+      switch (req.body.forDay) {
+        case "heute": {
+          readVplan("heute");
+          break;
+        }
+        case "morgen": {
+          readVplan("morgen");
+          break;
+        }
+        default: {
+          return;
+        }
+      }
+      res.send("VPLAN_SELECTED: " + req.body.forDay);
     });
   });
 });
@@ -182,17 +208,29 @@ app.get('/dashboard', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-  res.redirect('/0?a=' + req.query.a + '&b=' + req.query.b + '&c=' + req.query.c);
+  res.send("Nutze /heute|morgen/0/?a=A&b=B&c=C");
 });
 
-app.get('/loops', function (req, res) {
-  var data = xmlData.vp.haupt[0].aktion;
+app.get('/heute', function (req, res) {
+  res.redirect('/heute/0?a=' + req.query.a + '&b=' + req.query.b + '&c=' + req.query.c);
+});
+
+app.get('/morgen', function (req, res) {
+  res.redirect('/morgen/0?a=' + req.query.a + '&b=' + req.query.b + '&c=' + req.query.c);
+});
+
+app.get('/heute/loops', function (req, res) {
+  var data = heute.vp.haupt[0].aktion;
   res.send(Math.ceil((data.length) / 20).toString());
 });
 
-app.get('/:offset', function (req, res) {
-  readVplan();
-  if (xmlData === undefined) {
+app.get('/morgen/loops', function (req, res) {
+  var data = morgen.vp.haupt[0].aktion;
+  res.send(Math.ceil((data.length) / 20).toString());
+});
+
+app.get('/heute/:offset', function (req, res) {
+  if (heute === undefined) {
     res.send("NO_VPLAN_SELECTED");
     return;
   }
@@ -203,7 +241,30 @@ app.get('/:offset', function (req, res) {
   };
   //console.log(req.params.offset);
   var offset = parseInt(req.params.offset);
-  var data = xmlData.vp.haupt[0].aktion;
+  var data = heute.vp.haupt[0].aktion;
+  var array = [];
+  for (var i = (offset * 20); i < ((offset + 1) * 20) && i < data.length; i++) {
+    array.push(data[i]);
+  }
+  res.render('vplan', {
+    data: array
+  });
+
+});
+
+app.get('/morgen/:offset', function (req, res) {
+  if (morgen === undefined) {
+    res.send("NO_VPLAN_SELECTED");
+    return;
+  }
+  timeParameters = {
+    a: req.query.a,
+    b: req.query.b,
+    c: req.query.c
+  };
+  //console.log(req.params.offset);
+  var offset = parseInt(req.params.offset);
+  var data = morgen.vp.haupt[0].aktion;
   var array = [];
   for (var i = (offset * 20); i < ((offset + 1) * 20) && i < data.length; i++) {
     array.push(data[i]);

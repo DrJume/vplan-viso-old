@@ -1,30 +1,35 @@
 <table class="table table-striped table-responsive">
-  	<th>Klasse</th>
-    <th>Stunde</th>
-    <th>Fach</th>
-    <th>Lehrer</th>
-    <th>Raum</th>
-    <th>Beschreibung</th>
+	<th>Klasse</th>
+	<th>Stunde</th>
+	<th>Fach</th>
+	<th>Lehrer</th>
+	<th>Raum</th>
+	<th>Beschreibung</th>
 
-  {{#each data}}
-    <tr>
-      <td>{{getDataSafe this.klasse}}</td>
-      <td>{{getDataSafe this.stunde}}</td>
-      <td>{{getDataSafe this.fach}}</td>
-      <td>{{getDataSafe this.lehrer}}</td>
-      <td>{{getDataSafe this.raum}}</td>
-      <td>{{getDataSafe this.info}}</td>
-    </tr>
-  {{/each}}
+	{{#each data}}
+	<tr>
+		<td>{{getDataSafe this.klasse}}</td>
+		<td>{{getDataSafe this.stunde}}</td>
+		<td>{{getDataSafe this.fach}}</td>
+		<td>{{getDataSafe this.lehrer}}</td>
+		<td>{{getDataSafe this.raum}}</td>
+		<td>{{getDataSafe this.info}}</td>
+	</tr>
+	{{/each}}
 </table>
 
 <script type="text/javascript">
-  $.get( "loops", function( loops ) {
-    var urlSplit = location.href.split('/');
+  var urlSplit = location.href.split('/');
+  var forDay = urlSplit[urlSplit.length-2];
+  
+  $.get( "/"+forDay+"/loops", function( loops ) {
     var i = parseInt(urlSplit[urlSplit.length-1])+1;
     if(i>(loops-1)){
       i = 0;
     }
+
+    console.log(loops);
+    console.log(forDay);
 
     // var a = -16.374269;
     // var b = 791.22807;
@@ -37,7 +42,7 @@
 
     console.log(displayTime);
     setTimeout(function(){
-      window.location = "/"+i+'?a='+a+'&b='+b+'&c='+c;
+      window.location = "/"+forDay+"/"+i+'?a='+a+'&b='+b+'&c='+c;
     }, displayTime);
 
   });
