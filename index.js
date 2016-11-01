@@ -83,12 +83,10 @@ function readVplan(forDay) {
         switch (forDay) {
           case "heute": {
             heute = result;
-            console.log("heute");
             break;
           }
           case "morgen": {
             morgen = result;
-            console.log("morgen");
             break;
           }
           default: {
@@ -99,18 +97,19 @@ function readVplan(forDay) {
     });
   });
 }
-readVplan();
+readVplan("heute");
+readVplan("morgen");
 
 app.post('/file', function (req, res) {
   upload(req, res, function (err) {
     if (err) {
       if (err.code == "LIMIT_FILE_SIZE") {
-        res.send("FILE_TO_BIG");
+        res.send(["ERROR", "FILE_TO_BIG"]);
       }
       return;
     }
     if (!req.file) {
-      res.send("NO_FILE");
+      res.send(["ERROR", "NO_FILE"]);
       return;
     }
     db.insert({
@@ -128,18 +127,18 @@ app.post('/file', function (req, res) {
 });
 
 app.delete('/file', function (req, res) {
-  if (req.body.id === "") {
-    res.send("NOTHING_SELECTED");
+  if (req.body.id === undefined) {
+    res.send(["ERROR", "NOTHING_SELECTED"]);
     return;
   }
   fs.unlink(__dirname + "/uploads/" + req.body.name, function () {
     db.remove({ _id: req.body.id }, function (err) {
       if (err) {
-        res.send("ERROR");
+        res.send("ERROR", err);
         console.log(err);
         return;
       }
-      res.send("SELECTION_DELETED");
+      res.send(["SUCCESS", "SELECTION_DELETED"]);
     });
   });
 });
@@ -151,15 +150,19 @@ app.get('/file', function (req, res) {
 });
 
 app.put('/file', function (req, res) {
+  if (req.body.id === undefined) {
+    res.send(["ERROR", "NO_SELECTION"]);
+    return;
+  }
   db.update({ forDay: { $ne: null } }, { $set: { forDay: null } }, function (err) {
     if (err) {
-      res.send("ERROR");
+      res.send(["ERROR", err]);
       console.log(err);
       return;
     }
     db.update({ _id: req.body.id }, { $set: { forDay: req.body.forDay } }, function (err) {
       if (err) {
-        res.send("ERROR");
+        res.send(["ERROR", err]);
         console.log(err);
         return;
       }
@@ -176,12 +179,10 @@ app.put('/file', function (req, res) {
           return;
         }
       }
-      res.send("VPLAN_SELECTED: " + req.body.forDay);
+      res.send(["SUCCESS", "VPLAN_SELECTED: " + req.body.forDay]);
     });
   });
 });
-
-
 
 app.get('/dashboard', function (req, res) {
   var activePage = "";

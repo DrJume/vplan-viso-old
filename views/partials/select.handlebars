@@ -19,7 +19,7 @@
 	<button type="button" class="btn btn-success" id="heute"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Heute</button>
 	<button type="button" class="btn btn-success" id="morgen"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i> Morgen</button>
 
-
+	<!-- Confirm deletetion modal -->
 	<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -39,6 +39,8 @@
 		<!-- /.modal-dialog -->
 	</div>
 	<!-- /.modal -->
+
+	{{> actionModals}}
 
 </div>
 
@@ -61,9 +63,12 @@
           id: $('#selection option:selected').val(),
           name: $('#selection option:selected').text().trim()
         }
-      }).done(function(msg) {
-        console.log(msg);
-        location.reload(true);
+      }).done(function(res) {
+        console.log(res);
+        showModal(res, function(){
+          console.log("ok");
+          location.reload(true);
+        });
       });
     });
   });
@@ -84,9 +89,11 @@
         id: $('#selection option:selected').val(),
         forDay: forDay
       }
-    }).done(function(msg) {
-      console.log(msg);
-      //location.reload(true);
+    }).done(function(res) {
+      console.log(res);
+      showModal(res, function(){
+
+      });
     });
   }
 </script>

@@ -1,0 +1,92 @@
+<style>
+	#successModal {
+		background-color: rgba(24, 188, 156, 0.75);
+	}
+	
+	#errorModal {
+		background-color: rgba(231, 76, 60, 0.75);
+	}
+</style>
+
+<!-- Success modal -->
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title"><span id="successTitle"></span></h4>
+			</div>
+			<div class="modal-body">
+				<p><span id="successBody"></span></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal" id="ok">OK</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<!-- Error modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title"><span id="errorTitle"></span></h4>
+			</div>
+			<div class="modal-body">
+				<p><span id="errorBody"></span></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal" id="ok">OK</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script type="text/javascript">
+  $('#successModal').modal({
+    keyboard: false,
+    show: false,
+    backdrop: "static"
+  });
+
+  $('#errorModal').modal({
+    keyboard: false,
+    show: false,
+    backdrop: "static"
+  });
+
+  function showModal(res, cb){
+    switch(res[0]){
+      case "SUCCESS": {
+        $('#successTitle').html("Erfolgreich");
+        $('#successBody').html(res[1]);
+        $('#successModal').modal('show');
+				$('#ok').click(function(event) {
+					cb();
+				});
+        break;
+      }
+      case "ERROR": {
+        $('#errorTitle').html("Fehler");
+        $('#errorBody').html(res[1]);
+        $('#errorModal').modal('show');
+				$('#ok').click(function(event) {
+					cb();
+				});
+        break;
+      }
+      default:{
+        console.log("UNKNOWN_RESPONSE_TYPE");
+        return;
+      }
+    }
+	  
+  }
+</script>
