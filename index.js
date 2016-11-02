@@ -128,7 +128,7 @@ app.post('/file', function (req, res) {
 
 app.delete('/file', function (req, res) {
   if (req.body.id === undefined) {
-    res.send(["ERROR", "NOTHING_SELECTED"]);
+    res.send(["ERROR", "NO_FILE_ID_GIVEN"]);
     return;
   }
   fs.unlink(__dirname + "/uploads/" + req.body.name, function () {
@@ -151,7 +151,7 @@ app.get('/file', function (req, res) {
 
 app.put('/file', function (req, res) {
   if (req.body.id === undefined) {
-    res.send(["ERROR", "NO_SELECTION"]);
+    res.send(["ERROR", "NO_FILE_ID_GIVEN"]);
     return;
   }
   db.update({ forDay: { $ne: null } }, { $set: { forDay: null } }, function (err) {
