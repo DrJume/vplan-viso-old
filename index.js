@@ -107,7 +107,7 @@ readVplan("heute");
 readVplan("morgen");
 
 // move up schedule at 2:00 (AM)
-var moveUpVplan = nodeSchedule.scheduleJob('* 2 * * *', function(){
+var moveUpVplan = nodeSchedule.scheduleJob('* 2 * * *', function () {
   console.log("Vplan move up at 2:00");
   db.update({ forDay: "heute" }, { $set: { forDay: null } }, function (err) {
     if (err) {
@@ -183,7 +183,7 @@ app.put('/file', function (req, res) {
     res.send(["ERROR", "NO_FILE_ID_GIVEN"]);
     return;
   }
-  db.update({ forDay: { $ne: null } }, { $set: { forDay: null } }, function (err) {
+  db.update({ forDay: req.body.forDay }, { $set: { forDay: null } }, function (err) {
     if (err) {
       res.send(["ERROR", err]);
       console.log(err);
