@@ -52,6 +52,9 @@
   });
 
   $('#delete').click(function(event) {
+    if ($('#selection option:selected').html() === undefined) {
+      return;
+    }
     $('#selectionDisplay').html($('#selection option:selected').html());
     $('#confirmDelete').modal('show');
     $('#confirm').click(function(event) {
@@ -66,7 +69,7 @@
       }).done(function(res) {
         console.log(res);
         showModal(res, function(){
-          console.log("ok");
+          console.log("Modal dismissed");
           location.reload(true);
         });
       });
@@ -92,7 +95,7 @@
     }).done(function(res) {
       console.log(res);
       showModal(res, function(){
-
+        console.log("Modal dismissed");
       });
     });
   }
