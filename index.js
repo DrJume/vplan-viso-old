@@ -119,6 +119,7 @@ var moveUpVplan = nodeSchedule.scheduleJob('* 2 * * *', function () {
         console.log(err);
         return;
       }
+      console.log("Successfully moved up Vplan");
     });
   });
 });
