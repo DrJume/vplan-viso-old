@@ -8,6 +8,7 @@ var db = new Datastore({ filename: 'db/files.db', autoload: true });
 var fs = require('fs');
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
+var nodeSchedule = require('node-schedule');
 var heute, morgen;
 var timeParameters;
 var multer = require('multer');
@@ -99,6 +100,22 @@ function readVplan(forDay) {
 }
 readVplan("heute");
 readVplan("morgen");
+
+var moveUpVplan = nodeSchedule.scheduleJob('* 2 * * *', function(){
+  console.log("Vplan move up at 2:00");
+  db.update({ forDay: "heute" }, { $set: { forDay: null } }, function (err) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    db.update({ forDay: "morgen" }, { $set: { forDay: "heute" } }, function (err) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    });
+  });
+});
 
 app.post('/file', function (req, res) {
   upload(req, res, function (err) {
