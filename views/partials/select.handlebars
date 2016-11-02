@@ -10,7 +10,7 @@
 	<br>
 	<select id="selection">
     {{#each vplanList}}
-      <option value="{{this._id}}">{{this.filename}}</option>
+      <option value="{{this._id}}">{{this.filename}} <i>[{{this.forDay}}]</i></option>
     {{/each}}
   </select>
 	<button type="button" id="delete" class="btn btn-xs btn-danger"><i class="fa fa-lg fa-trash" aria-hidden="true"></i> Auswahl löschen</button>
@@ -96,6 +96,7 @@
       console.log(res);
       showModal(res, function(){
         console.log("Modal dismissed");
+        location.reload(true);
       });
     });
   }
