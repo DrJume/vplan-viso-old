@@ -11,6 +11,7 @@ var parser = new xml2js.Parser();
 var nodeSchedule = require('node-schedule');
 var heute, morgen;
 var timeParameters;
+// file upload system
 var multer = require('multer');
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -25,6 +26,7 @@ var upload = multer({
   limits: { fileSize: 524288000 }
 }).single('file_upload');
 
+// Handlebars engine initialisation
 var hbs = exphbs.create({
   defaultLayout: 'main',
   // Specify helpers which are only registered on this instance.
@@ -54,18 +56,20 @@ var hbs = exphbs.create({
     }
   }
 });
-
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-
 // parse application/json
 app.use(bodyParser.json());
 
+// API for public assets
 app.use('/public', express.static('public'));
 
+// end of app-initialisations
+
+// readVplan function
 function readVplan(forDay) {
   db.findOne({ forDay: forDay }, function (err, doc) {
     if (err) {
@@ -98,9 +102,11 @@ function readVplan(forDay) {
     });
   });
 }
+// reading Vplans on startup
 readVplan("heute");
 readVplan("morgen");
 
+// move up schedule at 2:00 (AM)
 var moveUpVplan = nodeSchedule.scheduleJob('* 2 * * *', function(){
   console.log("Vplan move up at 2:00");
   db.update({ forDay: "heute" }, { $set: { forDay: null } }, function (err) {
@@ -117,6 +123,9 @@ var moveUpVplan = nodeSchedule.scheduleJob('* 2 * * *', function(){
   });
 });
 
+// app routes
+
+// Vplan upload route
 app.post('/file', function (req, res) {
   upload(req, res, function (err) {
     if (err) {
@@ -143,6 +152,7 @@ app.post('/file', function (req, res) {
   });
 });
 
+// Vplan deletion route
 app.delete('/file', function (req, res) {
   if (req.body.id === undefined) {
     res.send(["ERROR", "NO_FILE_ID_GIVEN"]);
@@ -160,12 +170,14 @@ app.delete('/file', function (req, res) {
   });
 });
 
+// debug: get listed Vplans
 app.get('/file', function (req, res) {
   db.find({}, function (err, docs) {
     res.send(docs);
   });
 });
 
+// select Vplan
 app.put('/file', function (req, res) {
   if (req.body.id === undefined) {
     res.send(["ERROR", "NO_FILE_ID_GIVEN"]);
@@ -201,6 +213,7 @@ app.put('/file', function (req, res) {
   });
 });
 
+// dashboard route
 app.get('/dashboard', function (req, res) {
   var activePage = "";
   switch (req.query.p) {
@@ -225,10 +238,12 @@ app.get('/dashboard', function (req, res) {
   });
 });
 
+// app root route
 app.get('/', function (req, res) {
   res.send("Nutze /heute|morgen/0/?a=A&b=B&c=C");
 });
 
+// Vplan display system
 app.get('/heute', function (req, res) {
   res.redirect('/heute/0?a=' + req.query.a + '&b=' + req.query.b + '&c=' + req.query.c);
 });
@@ -267,7 +282,6 @@ app.get('/heute/:offset', function (req, res) {
   res.render('vplan', {
     data: array
   });
-
 });
 
 app.get('/morgen/:offset', function (req, res) {
@@ -290,9 +304,9 @@ app.get('/morgen/:offset', function (req, res) {
   res.render('vplan', {
     data: array
   });
-
 });
 
+// app start on port 80
 app.listen(80, function () {
   console.log('Example app listening on port 80!');
 });
