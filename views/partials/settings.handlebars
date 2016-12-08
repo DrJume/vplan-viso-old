@@ -1,0 +1,96 @@
+<style>
+	#selectionDisplay {
+		font-style: italic;
+		color: #e43232;
+	}
+</style>
+
+<div class="jumbotron">
+	<h3>Einstellungen</h3>
+  <button type="button" class="btn btn-xs btn-primary" id="reset">Auf Standard zurücksetzen</button>
+
+  <br>
+	<br>
+  <br> 
+
+  <form>
+    <div class="form-group">
+      <label for="vplanItemsDisplay">Anzahl anzuzeigender Einträge pro Seite</label>
+      <input type="number" class="form-control" id="vplanItemsDisplay" value="{{settings.vplanItemsDisplay}}" min="1" max="100">
+    </div>
+  </form>
+
+  <br>
+
+  <h4>Anzeigedauer bei unterschiedlichem Inhalt (in Sekunden)</h4>
+
+  <br>
+
+  <form>
+    <div class="col-sm-3" style="padding-left: 0px;">
+      <div class="form-group">
+        <label for="0-25">0% - 25%</label>
+        <input type="number" class="form-control" id="0-25" value="{{settings.displayTime.0-25}}" min="1" max="60">
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label for="25-50">25% - 50%</label>
+        <input type="number" class="form-control" id="25-50" value="{{settings.displayTime.25-50}}" min="1" max="60">
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="form-group">
+        <label for="50-75">50% - 75%</label>
+        <input type="number" class="form-control" id="50-75" value="{{settings.displayTime.50-75}}" min="1" max="60">
+      </div>
+    </div>
+    <div class="col-sm-3" style="padding-right: 0px;">
+      <div class="form-group">
+        <label for="75-100">75% - 100%</label>
+        <input type="number" class="form-control" id="75-100" value="{{settings.displayTime.75-100}}" min="1" max="60">
+      </div>
+    </div>
+  </form>
+
+  <button type="button" class="btn btn-default" id="apply" style="margin-top: 3vh;"><i class="fa fa-lg fa-floppy-o" aria-hidden="true"></i> Übernehmen</button>
+
+	{{> actionModals}}
+
+</div>
+
+<script type="text/javascript">
+  $('#apply').click(function(event) {
+    if ($('#vplanItemsDisplay').val() == "" || $('#0-25').val() == "" || $('#25-50').val() == "" || $('#50-75').val() == "" || $('#75-100').val() == "") {
+      console.log("NOPE");
+      return;
+    }
+    $.ajax({
+      method: "PUT",
+      url: "/settings",
+      data: {
+        vplanItemsDisplay: $('#vplanItemsDisplay').val(),
+        displayTime: {
+          "0-25": $('#0-25').val(),
+          "25-50": $('#25-50').val(),
+          "50-75":  $('#50-75').val(),
+          "75-100": $('#75-100').val()
+        }
+      }
+    }).done(function(res) {
+      console.log(res);
+      showModal(res, function(){
+        console.log("Modal dismissed");
+        location.reload(true);
+      });
+    });
+  });
+
+  $('#reset').click(function(event) {
+    $('#vplanItemsDisplay').val(20);
+    $('#0-25').val(3);
+    $('#25-50').val(6);
+    $('#50-75').val(8);
+    $('#75-100').val(12);
+  });
+</script>

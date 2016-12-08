@@ -10,6 +10,7 @@
       <ul class="nav nav-pills pull-right">
         <li role="presentation" class="{{isActivePage "select" activePage}}"><a href="?p=select">Auswählen</a></li>
         <li role="presentation" class="{{isActivePage "upload" activePage}}"><a href="?p=upload">Hochladen</a></li>
+        <li role="presentation" class="{{isActivePage "settings" activePage}}"><a href="?p=settings">Einstellungen</a></li>
       </ul>
     </nav>
     <h2 class="text-muted">Dashboard</h2>
@@ -18,7 +19,11 @@
   {{#if (isActivePage "select" activePage) }}
     {{> select}}
   {{else}}
-    {{> upload}}
+    {{#if (isActivePage "upload" activePage) }}
+      {{> upload}}
+    {{else}}
+      {{> settings}}
+    {{/if}}
   {{/if}}
 
 
