@@ -1,6 +1,7 @@
 var express = require('express');
 var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
+var favicon = require('serve-favicon');
 var moment = require('moment');
 var app = express();
 var Datastore = require('nedb');
@@ -58,6 +59,9 @@ var hbs = exphbs.create({
 });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
+
+// serve favicon
+app.use(favicon(__dirname + '/public/favicon.png'));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
