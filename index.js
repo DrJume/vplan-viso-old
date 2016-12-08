@@ -107,7 +107,7 @@ readVplan("heute");
 readVplan("morgen");
 
 // move up schedule at 2:00 (AM)
-var moveUpVplan = nodeSchedule.scheduleJob('* 2 * * *', function () {
+var moveUpVplan = nodeSchedule.scheduleJob('* 2 0 0 0', function () {
   console.log("Vplan move up at 2:00");
   db.update({ forDay: "heute" }, { $set: { forDay: null } }, function (err) {
     if (err) {
