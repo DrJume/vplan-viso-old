@@ -9,40 +9,40 @@
   <h3>Vertretungsplan auswählen</h3>
   <br>
   <form class="form-inline">
-    <select multiple id="selection" class="form-control" style="width: 53vw;">
-      {{#each vplanList}}
-        <option value="{{this._id}}">{{this.filename}} <i>[{{this.forDay}}]</i></option>
-      {{/each}}
-    </select>
-    <button type="button" id="delete" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-trash" aria-hidden="true"></i> Auswahl löschen</button>
-    <br>
-    <br>
-    <button type="button" class="btn btn-lg btn-default" id="heute"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Heute</button>
-    <button type="button" class="btn btn-lg btn-default" id="morgen"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i> Morgen</button>
-  </form>
+    <select multiple id="selection" class="form-control" style="width: 53vw;"> {{#each vplanList}}
+<option value="{{this._id}}">{{this.filename}} <i>[{{this.forDay}}]</i></option>
+{{/each}}
+</select>
+<button type="button" id="delete" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-trash" aria-hidden="true"></i> Auswahl löschen</button>
+<br>
+<br>
+<button type="button" class="btn btn-lg btn-default" id="heute"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Heute</button>
+<button type="button" class="btn btn-lg btn-default" id="morgen"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i> Morgen</button>
+<button type="button" class="btn btn-lg btn-default" id="disable"><i class="fa fa-lg fa-ban" aria-hidden="true"></i> Deaktivieren</button>
+</form>
 
-  <!-- Confirm deletetion modal -->
-  <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Bestätigung</h4>
-        </div>
-        <div class="modal-body">
-          <p>Soll die Auswahl <span id="selectionDisplay"></span> gelöscht werden?</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Nein</button>
-          <button type="button" class="btn btn-success" id="confirm">Ja</button>
-        </div>
+<!-- Confirm deletetion modal -->
+<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Bestätigung</h4>
       </div>
-      <!-- /.modal-content -->
+      <div class="modal-body">
+        <p>Soll die Auswahl <span id="selectionDisplay"></span> gelöscht werden?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Nein</button>
+        <button type="button" class="btn btn-success" id="confirm">Ja</button>
+      </div>
     </div>
-    <!-- /.modal-dialog -->
+    <!-- /.modal-content -->
   </div>
-  <!-- /.modal -->
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
-  {{> actionModals}}
+{{> actionModals}}
 
 </div>
 
@@ -53,24 +53,23 @@
     backdrop: "static"
   });
 
-  $('#delete').click(function(event) {
-    if ($('#selection option:selected').html() === undefined) {
+  $('#delete').click(function (event) {
+    if (!$('#selection option:selected').html()) {
       return;
     }
     $('#selectionDisplay').html($('#selection option:selected').html());
     $('#confirmDelete').modal('show');
-    $('#confirm').click(function(event) {
+    $('#confirm').click(function (event) {
       $('#confirmDelete').modal('hide');
       $.ajax({
         method: "DELETE",
         url: "/vplans",
         data: {
-          id: $('#selection option:selected').val(),
-          name: $('#selection option:selected').text().trim()
+          id: $('#selection option:selected').val()
         }
-      }).done(function(res) {
+      }).done(function (res) {
         console.log(res);
-        showModal(res, function(){
+        showModal(res, function () {
           console.log("Modal dismissed");
           location.reload(true);
         });
@@ -78,31 +77,32 @@
     });
   });
 
-  $('#heute').click(function(event) {
-   if ($('#selection option:selected').val() === undefined) {
-     return;
-   }
-   selectVplan("heute");
+  $('#heute').click(function (event) {
+    selectVplan("heute");
   });
 
-  $('#morgen').click(function(event) {
-   if ($('#selection option:selected').val() === undefined) {
-     return;
-   }
-   selectVplan("morgen");
+  $('#morgen').click(function (event) {
+    selectVplan("morgen");
+  });
+
+  $('#disable').click(function (event) {
+    selectVplan("");
   });
 
   function selectVplan(forDay) {
-     $.ajax({
+    if (!$('#selection option:selected').val()) {
+      return;
+    }
+    $.ajax({
       method: "PUT",
       url: "/vplans",
       data: {
         id: $('#selection option:selected').val(),
         forDay: forDay
       }
-    }).done(function(res) {
+    }).done(function (res) {
       console.log(res);
-      showModal(res, function(){
+      showModal(res, function () {
         console.log("Modal dismissed");
         location.reload(true);
       });

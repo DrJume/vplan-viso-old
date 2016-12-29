@@ -1,10 +1,40 @@
 <div class="jumbotron">
   <h3>Vertretungsplan hochladen</h3>
   <br>
-  <form action="/vplans" method="post" enctype="multipart/form-data">
+  <form>
     <div class="form-group">
-      <input type="file" name="file_upload">
+      <input type="file">
     </div>
     <input type="submit" class="btn btn-primary">
   </form>
 </div>
+
+<script type="text/javascript">
+  $('form').submit(function (evt) {
+    evt.preventDefault();
+
+    var file = $('input:file').get()[0].files[0];
+
+    if (!file) {
+      console.log("NO_FILE");
+      return;
+    }
+
+    var fileReader = new FileReader();
+    fileReader.onload = function () {
+      $.post('/vplans', {
+        filename: file.name,
+        data: fileReader.result
+      }, function (data) {
+        if (data[0] == "ERROR") {
+          console.log(data);
+          return;
+        }
+
+        location.href = location.pathname;
+      });
+    };
+
+    fileReader.readAsText(file);
+  });
+</script>
