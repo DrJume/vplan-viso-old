@@ -10,7 +10,8 @@
 .vscode/ftp-sync.json
 tsconfig.json
 jsconfig.json
-
+uploads/
+db/
 
 ### Node ###
 # Logs
