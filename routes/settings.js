@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var DB = require('../modules/DB-Connection.js');
+var ReloadSocket = require('../modules/ReloadSocket.js');
 
 // settings update route
 router.put('/', function (req, res) {
@@ -15,10 +16,12 @@ router.put('/', function (req, res) {
   }, {}, function (err) {
     if (err) {
       console.log(err);
-      res.send(["ERROR", "DB_UPDATE_FAILED"]);
+      res.send(["ERROR", "Speicherung der Einstellungen fehlgeschlagen"]);
       return;
     }
-    res.send(["SUCCESS", "SETTINGS_APPLIED"]);
+    
+    res.send(["SUCCESS", "Einstellungen übernommen"]);
+    ReloadSocket("all");
   });
 });
 

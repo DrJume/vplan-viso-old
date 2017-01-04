@@ -55,11 +55,13 @@
 
   <button type="button" class="btn btn-default" id="apply" style="margin-top: 3vh;"><i class="fa fa-lg fa-floppy-o" aria-hidden="true"></i> Übernehmen</button>
 
-  {{> actionModals}}
-
 </div>
 
+{{> actionModals}}
+
 <script type="text/javascript">
+
+  // Settings application handler
   $('#apply').click(function (event) {
     if ($('#displayAmount').val() == "" || $('#0-25').val() == "" || $('#25-50').val() == "" || $('#50-75').val() == "" || $('#75-100').val() == "") {
       console.log("NOPE");
@@ -86,6 +88,7 @@
     });
   });
 
+  // Settings reset handler
   $('#reset').click(function (event) {
     $('#displayAmount').val(20);
     $('#0-25').val(3);

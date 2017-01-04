@@ -5,6 +5,7 @@ var DB = require('../modules/DB-Connection.js');
 // dashboard view route
 router.get('/', function (req, res) {
   var activePage = "";
+  
   switch (req.query.p) {
     case undefined: {
       res.redirect("/dashboard?p=select");
@@ -23,12 +24,16 @@ router.get('/', function (req, res) {
       break;
     }
   }
-  DB.vplans.find({}, function (err, docVplans) {
-    DB.settings.findOne({}, function (err, docSettings) {
-      res.render('dashboard', {
-        activePage: activePage,
-        vplanList: docVplans,
-        settings: docSettings
+
+  DB.schueler.find({}, function (err, schueler) {
+    DB.lehrer.find({}, function (err, lehrer) {
+      DB.settings.findOne({}, function (err, settings) {
+        res.render('dashboard', {
+          activePage: activePage,
+          schueler: schueler,
+          lehrer: lehrer,
+          settings: settings
+        });
       });
     });
   });

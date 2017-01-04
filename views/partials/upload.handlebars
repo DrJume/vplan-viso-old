@@ -9,29 +9,44 @@
   </form>
 </div>
 
+{{> actionModals}}
+
 <script type="text/javascript">
+
+  // Form submittion handler
   $('form').submit(function (evt) {
     evt.preventDefault();
 
+    // Read the file on the client side
     var file = $('input:file').get()[0].files[0];
 
     if (!file) {
-      console.log("NO_FILE");
+      showModal(["ERROR", "Keine Datei ausgewählt"], function() {
+
+      });
+      return;
+    }
+
+    // Wrong file-type handler (just xml allowed)
+    if (file.name.split('.')[file.name.split('.').length-1] != 'xml') {
+      showModal(["ERROR", "Falscher Datei-Typ (nicht .xml)"], function() {
+
+      });
       return;
     }
 
     var fileReader = new FileReader();
     fileReader.onload = function () {
-      $.post('/vplans', {
+      // Upload the read file
+
+      $.post('/api', {
         filename: file.name,
         data: fileReader.result
-      }, function (data) {
-        if (data[0] == "ERROR") {
-          console.log(data);
-          return;
-        }
-
-        location.href = location.pathname;
+      }, function (res) {
+        showModal(res, function () {
+          // Redirect to vplan selection
+          location.href = location.pathname;
+        });
       });
     };
 

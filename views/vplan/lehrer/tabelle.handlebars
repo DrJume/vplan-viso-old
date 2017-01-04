@@ -1,0 +1,75 @@
+<table hidden id="vplan" style="color: black;" class="table table-striped">
+  <th>Stunde</th>
+  <th>Fach</th>
+  <th>Lehrer</th>
+  <th>Klasse</th>
+  <th>VFach</th>
+  <th>VLehrer</th>
+  <th>VRaum</th>
+  <th>Beschreibung</th>
+</table>
+
+<script type="text/javascript">
+  function calcDisplayTime(amount, settings) {
+    if (amount / settings.displayAmount <= 0.25) {
+      return settings.displayTime['0-25'];
+    } else if (amount / settings.displayAmount <= 0.5) {
+      return settings.displayTime['25-50'];
+    } else if (amount / settings.displayAmount <= 0.75) {
+      return settings.displayTime['50-75'];
+    } else if (amount / settings.displayAmount <= 1) {
+      return settings.displayTime['75-100'];
+    }
+  }
+
+  function loop(data, settings, cycle) {
+    $("tr[data]").remove();
+
+    $.each(data.vplan, function (i, item) {
+      if ((i + 1) > cycle + settings.displayAmount || (i + 1) <= cycle) {
+        return;
+      }
+
+      $('<tr data>').html("<td>" + item.stunde + "</td><td>" + item.fach + "</td><td>" + item.lehrer + "</td>" + "</td><td>" + item.klasse + "</td>" + "</td><td>" + item.vfach + "</td>" + "</td><td>" + item.vlehrer + "</td>" + "</td><td>" + item.vraum + "</td>" + "</td><td>" + item.info + "</td>").appendTo('#vplan');
+    });
+
+    var displayTime = calcDisplayTime($("tr[data]").length, settings) * 1000;
+
+    console.log("displayTime: " + displayTime + " ms");
+
+    setTimeout(function () {
+      if ((cycle + $("tr[data]").length) == data.vplan.length) {
+        cycle = -$("tr[data]").length;
+      }
+
+      loop(data, settings, (cycle + $("tr[data]").length));
+    }, displayTime);
+  }
+
+
+  console.log('/' + location.pathname.split('/')[1] + '/' + location.pathname.split('/')[2]);
+
+  $.getJSON('/' + location.pathname.split('/')[1] + '/' + location.pathname.split('/')[2], function (data) {
+    if (data == "NO_VPLAN_AVAILABLE") {
+      $.get("/placeholder", function (html) {
+        $('body').html(html);
+      });
+
+      return;
+    }
+
+    console.log("/settings");
+
+    $.getJSON("/settings", function (settings) {
+      $('table').removeAttr('hidden');
+
+      console.log(settings);
+
+      var cycle = 0;
+      loop(data, settings, cycle);
+    });
+  });
+
+</script>
+
+{{> reloadSocket}}

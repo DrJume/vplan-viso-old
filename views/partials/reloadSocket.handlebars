@@ -1,0 +1,8 @@
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script>
+  var socket = io.connect("{{socketUrl}}");
+  socket.on('reload', function (data) {
+    if (data.type == "all" || data.type == location.pathname.split('/')[1])
+    location.reload(true);
+  });
+</script>

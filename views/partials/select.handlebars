@@ -1,109 +1,181 @@
 <style>
-  #selectionDisplay {
+  #selection_span {
     font-style: italic;
     color: #e43232;
+  }
+
+  @media screen and (max-width: 767px) {
+    #top {
+        margin-bottom: 100px;
+    }
+  }
+
+  @media screen and (max-width: 1199px) {
+    #schueler_delete, #lehrer_delete {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+  }
+
+  @media screen and (max-width: 1199px) and (min-width: 768px) {
+    #schueler_disable, #lehrer_disable {
+      margin-top: 5px;
+    }
   }
 </style>
 
 <div class="jumbotron">
   <h3>Vertretungsplan auswählen</h3>
   <br>
-  <form class="form-inline">
-    <select multiple id="selection" class="form-control" style="width: 53vw;"> {{#each vplanList}}
-<option value="{{this._id}}">{{this.filename}} <i>[{{this.forDay}}]</i></option>
-{{/each}}
-</select>
-<button type="button" id="delete" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-trash" aria-hidden="true"></i> Auswahl löschen</button>
-<br>
-<br>
-<button type="button" class="btn btn-lg btn-default" id="heute"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Heute</button>
-<button type="button" class="btn btn-lg btn-default" id="morgen"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i> Morgen</button>
-<button type="button" class="btn btn-lg btn-default" id="disable"><i class="fa fa-lg fa-ban" aria-hidden="true"></i> Deaktivieren</button>
-</form>
-
-<!-- Confirm deletetion modal -->
-<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Bestätigung</h4>
-      </div>
-      <div class="modal-body">
-        <p>Soll die Auswahl <span id="selectionDisplay"></span> gelöscht werden?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Nein</button>
-        <button type="button" class="btn btn-success" id="confirm">Ja</button>
-      </div>
+  <br>
+  <div class="row">
+    <div class="col-sm-6">
+      <h4>
+        <u>Schüler</u>
+      </h4>
+      <form class="form-inline" id="top">
+        <select multiple id="schueler_selection" class="form-control"> 
+          {{#each schueler}}
+            <option value="{{this._id}}">{{this.filename}} <i>[{{this.forDay}}]</i></option>
+          {{/each}}
+        </select>
+        <button type="button" id="schueler_delete" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-trash" aria-hidden="true"></i> Auswahl löschen</button>
+        <br>
+        <br>
+        <button type="button" class="btn btn-lg btn-default" id="schueler_heute"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Heute</button>
+        <button type="button" class="btn btn-lg btn-default" id="schueler_morgen"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i> Morgen</button>
+        <button type="button" class="btn btn-lg btn-default" id="schueler_disable"><i class="fa fa-lg fa-ban" aria-hidden="true"></i> Deaktivieren</button>
+      </form>
     </div>
-    <!-- /.modal-content -->
+
+    <div class="col-sm-6">
+      <h4>
+        <u>Lehrer</u>
+      </h4>
+      <form class="form-inline">
+        <select multiple id="lehrer_selection" class="form-control"> 
+          {{#each lehrer}}
+            <option value="{{this._id}}">{{this.filename}} <i>[{{this.forDay}}]</i></option>
+          {{/each}}
+        </select>
+        <button type="button" id="lehrer_delete" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-trash" aria-hidden="true"></i> Auswahl löschen</button>
+        <br>
+        <br>
+        <button type="button" class="btn btn-lg btn-default" id="lehrer_heute"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Heute</button>
+        <button type="button" class="btn btn-lg btn-default" id="lehrer_morgen"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i> Morgen</button>
+        <button type="button" class="btn btn-lg btn-default" id="lehrer_disable"><i class="fa fa-lg fa-ban" aria-hidden="true"></i> Deaktivieren</button>
+      </form>
+    </div>
   </div>
-  <!-- /.modal-dialog -->
+
+  <!-- Confirm deletetion modal -->
+  <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Bestätigung</h4>
+        </div>
+        <div class="modal-body">
+          <p>Soll die Auswahl <span id="selection_span"></span> gelöscht werden?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Nein</button>
+          <button type="button" class="btn btn-success" id="confirm">Ja</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
 </div>
-<!-- /.modal -->
 
 {{> actionModals}}
 
-</div>
-
 <script type="text/javascript">
+  // Make option buttons smaller on little screens
+  if (window.innerWidth <= 488) {
+    $('.btn-lg').removeClass('btn-lg').addClass('btn-xs');
+  }
+
+  // Setup confirmDelete modal
   $('#confirmDelete').modal({
     keyboard: false,
     show: false,
     backdrop: "static"
   });
 
-  $('#delete').click(function (event) {
-    if (!$('#selection option:selected').html()) {
+  // Vplan deletion handler
+  $('#schueler_delete').click(function (event) {
+    deleteVplan("schueler");
+  });
+
+  $('#lehrer_delete').click(function (event) {
+    deleteVplan("lehrer");
+  });
+
+  function deleteVplan(type) {
+    if (!$('#' + type + '_selection option:selected').html()) {
       return;
     }
-    $('#selectionDisplay').html($('#selection option:selected').html());
+    $('#selection_span').html($('#' + type + '_selection option:selected').html());
     $('#confirmDelete').modal('show');
     $('#confirm').click(function (event) {
       $('#confirmDelete').modal('hide');
       $.ajax({
         method: "DELETE",
-        url: "/vplans",
+        url: "/api/" + type,
         data: {
-          id: $('#selection option:selected').val()
+          id: $('#' + type + '_selection option:selected').val()
         }
       }).done(function (res) {
-        console.log(res);
         showModal(res, function () {
-          console.log("Modal dismissed");
           location.reload(true);
         });
       });
     });
+  }
+
+  // Option buttons handler
+  $('#schueler_heute').click(function (event) {
+    selectVplan("schueler", "heute");
   });
 
-  $('#heute').click(function (event) {
-    selectVplan("heute");
+  $('#schueler_morgen').click(function (event) {
+    selectVplan("schueler", "morgen");
   });
 
-  $('#morgen').click(function (event) {
-    selectVplan("morgen");
+  $('#schueler_disable').click(function (event) {
+    selectVplan("schueler", "");
   });
 
-  $('#disable').click(function (event) {
-    selectVplan("");
+
+  $('#lehrer_heute').click(function (event) {
+    selectVplan("lehrer", "heute");
   });
 
-  function selectVplan(forDay) {
-    if (!$('#selection option:selected').val()) {
+  $('#lehrer_morgen').click(function (event) {
+    selectVplan("lehrer", "morgen");
+  });
+
+  $('#lehrer_disable').click(function (event) {
+    selectVplan("lehrer", "");
+  });
+
+  // Vplan selection handler
+  function selectVplan(type, forDay) {
+    if (!$('#' + type + '_selection option:selected').val()) {
       return;
     }
     $.ajax({
       method: "PUT",
-      url: "/vplans",
+      url: "/api/" + type,
       data: {
-        id: $('#selection option:selected').val(),
+        id: $('#' + type + '_selection option:selected').val(),
         forDay: forDay
       }
     }).done(function (res) {
-      console.log(res);
       showModal(res, function () {
-        console.log("Modal dismissed");
         location.reload(true);
       });
     });

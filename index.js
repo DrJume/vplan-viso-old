@@ -1,3 +1,6 @@
+// config
+var config = require('./package').config;
+
 // view middleware
 var express = require('express');
 var exphbs = require('express-handlebars');
@@ -6,7 +9,6 @@ var favicon = require('serve-favicon');
 var app = express();
 
 // storage middleware
-var fs = require('fs');
 var DB = require('./modules/DB-Connection.js');
 DB.settings.findOne({}, function (err, doc) {
   if (doc === null) {
@@ -33,8 +35,9 @@ var nodeSchedule = require('node-schedule');
 // router middleware
 var settings = require('./routes/settings');
 var dashboard = require('./routes/dashboard');
-var vplans = require('./routes/vplans');
-var view = require('./routes/view');
+var api = require('./routes/api');
+var schueler = require('./routes/schueler');
+var lehrer = require('./routes/lehrer');
 
 
 // Handlebars engine initialisation
@@ -48,6 +51,9 @@ var hbs = exphbs.create({
       } else {
         return "";
       }
+    },
+    socketUrl: function () {
+      return "http://" + config.ip + ':' + config.socket_port;
     }
   }
 });
@@ -67,20 +73,37 @@ app.use('/public', express.static('public'));
 
 // move up schedule at 2:00 (AM)
 var moveUpVplan = nodeSchedule.scheduleJob('* 2 0 0 0', function () {
-  console.log("Vplan move up at 2:00");
-  DB.vplans.update({ forDay: "heute" }, { $set: { forDay: "" } }, function (err) {
+  console.log("Vertretungsplan-Tagesanpassung um 2 Uhr");
+
+  DB.schueler.update({ forDay: "heute" }, { $set: { forDay: "" } }, function (err) {
     if (err) {
       console.log(err);
       return;
     }
 
-    DB.vplans.update({ forDay: "morgen" }, { $set: { forDay: "heute" } }, function (err) {
+    DB.schueler.update({ forDay: "morgen" }, { $set: { forDay: "heute" } }, function (err) {
       if (err) {
         console.log(err);
         return;
       }
 
-      console.log("Successfully moved up Vplan");
+      console.log("Vertretungsplan-Tagesanpassung für Schüler durchgeführt");
+    });
+  });
+
+  DB.lehrer.update({ forDay: "heute" }, { $set: { forDay: "" } }, function (err) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    DB.lehrer.update({ forDay: "morgen" }, { $set: { forDay: "heute" } }, function (err) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+      console.log("Vertretungsplan-Tagesanpassung für Lehrer durchgeführt");
     });
   });
 });
@@ -89,7 +112,7 @@ var moveUpVplan = nodeSchedule.scheduleJob('* 2 0 0 0', function () {
 // app routes
 
 app.get('/', function (req, res) {
-  res.send("Nutze /heute|morgen");
+  res.render('about');
 });
 
 // settings route
@@ -98,22 +121,22 @@ app.use('/settings', settings);
 // placeholder route
 app.use('/placeholder', express.static('views/placeholder.html'));
 
-// vplans route
-app.use('/vplans', vplans);
+// api route
+app.use('/api', api);
 
 // dashboard route
 app.use('/dashboard', dashboard);
 
 // view display system
-app.use('/heute', view);
-app.use('/morgen', view);
+app.use('/schueler', schueler);
+app.use('/lehrer', lehrer);
 
 // display a not found page
 app.get('*', function (req, res) {
   res.redirect('/');
 });
 
-// app start on port 80
-app.listen(80, function () {
-  console.log("Example app listening on port 80!");
+// app start
+app.listen(config.app_port, function () {
+  console.log("ManosVplan listening on port " + config.app_port + "!");
 });

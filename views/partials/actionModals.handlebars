@@ -1,10 +1,14 @@
 <style>
 	#successModal {
-		background-color: rgba(81, 204, 54, 0.75);
+		background-color: rgba(80, 80, 80, 0.5);
 	}
 	
 	#errorModal {
-		background-color: rgba(245, 24, 22, 0.75);
+		background-color: rgba(80, 80, 80, 0.5);
+	}
+
+	p {
+		font-size: 21px;
 	}
 </style>
 
@@ -50,42 +54,45 @@
 <!-- /.modal -->
 
 <script type="text/javascript">
-  $('#successModal').modal({
-    keyboard: false,
-    show: false,
-    backdrop: "static"
-  });
 
-  $('#errorModal').modal({
-    keyboard: false,
-    show: false,
-    backdrop: "static"
-  });
+	// Setup modals
+	$('#successModal').modal({
+		keyboard: false,
+		show: false,
+		backdrop: "static"
+	});
 
-  function showModal(res, cb){
-    switch(res[0]){
-      case "SUCCESS": {
-        $('#successTitle').html("Erfolgreich");
-        $('#successBody').html(res[1]);
-        $('#successModal').modal('show');
+	$('#errorModal').modal({
+		keyboard: false,
+		show: false,
+		backdrop: "static"
+	});
+
+	// Modal handler
+	function showModal(res, cb) {
+		switch (res[0]) {
+			case "SUCCESS": {
+				$('#successTitle').html("Erfolgreich");
+				$('#successBody').html(res[1]);
+				$('#successModal').modal('show');
 				$('#successModal').on('hidden.bs.modal', function (e) {
 					cb();
-      	});
-        break;
-      }
-      case "ERROR": {
-        $('#errorTitle').html("Fehler");
-        $('#errorBody').html(res[1]);
-        $('#errorModal').modal('show');
+				});
+				break;
+			}
+			case "ERROR": {
+				$('#errorTitle').html("Fehler");
+				$('#errorBody').html(res[1]);
+				$('#errorModal').modal('show');
 				$('#errorModal').on('hidden.bs.modal', function (e) {
 					cb();
-      	});
-        break;
-      }
-      default:{
-        console.log("UNKNOWN_RESPONSE_TYPE");
-        return;
-      }
-    }
-  }
+				});
+				break;
+			}
+			default: {
+				console.log("UNKNOWN_RESPONSE_TYPE");
+				return;
+			}
+		}
+	}
 </script>
