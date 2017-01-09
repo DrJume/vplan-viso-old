@@ -23,6 +23,14 @@ router.get('/', function (req, res) {
       activePage = "settings";
       break;
     }
+    case "edit": {
+      activePage = "edit";
+      break;
+    }
+    default: {
+      res.redirect("/dashboard");
+      return;
+    }
   }
 
   DB.schueler.find({}, function (err, schueler) {

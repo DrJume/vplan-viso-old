@@ -1,1 +1,32 @@
+<!-- [STYLING] -->
+<h3>Geänderte Aufsichten:	</h3>
+
+<ul style="color: black;"></ul>
+
+
+<script type="text/javascript">
+  console.log('/' + location.pathname.split('/')[1] + '/' + location.pathname.split('/')[2]);
+
+  $.getJSON('/' + location.pathname.split('/')[1] + '/' + location.pathname.split('/')[2], function (data) {
+    if (data == "NO_VPLAN_AVAILABLE") {
+      // $.get("/placeholder", function (html) {
+      //   $('body').html(html);
+      // });
+      return;
+    }
+
+    console.log(data);
+
+    $.getJSON("/settings", function (settings) {
+      console.log(settings);
+
+      // [STYLING] fa-size
+      $.each(data.aufsicht, function (i, item) {
+        $('<li>').html(item.replace("-->", "<i class='fa fa-fw fa-lg fa-arrow-right'></i>")).appendTo('ul');
+      });
+    });
+  });
+
+</script>
+
 {{> reloadSocket}}

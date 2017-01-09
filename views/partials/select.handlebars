@@ -10,11 +10,9 @@
     }
   }
 
-  @media screen and (max-width: 1199px) {
-    #schueler_delete, #lehrer_delete {
+  #schueler_delete, #lehrer_delete, #schueler_edit, #lehrer_edit {
         margin-top: 10px;
         margin-bottom: 10px;
-    }
   }
 
   @media screen and (max-width: 1199px) and (min-width: 768px) {
@@ -39,12 +37,15 @@
             <option value="{{this._id}}">{{this.filename}} <i>[{{this.forDay}}]</i></option>
           {{/each}}
         </select>
-        <button type="button" id="schueler_delete" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-trash" aria-hidden="true"></i> Auswahl löschen</button>
+        <div>
+          <button type="button" id="schueler_delete" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-trash"></i> Auswahl löschen</button>
+          <button type="button" id="schueler_edit" class="btn btn-sm btn-warning"><i class="fa fa-lg fa-pencil"></i> Auswahl bearbeiten</button>
+        </div>
         <br>
         <br>
-        <button type="button" class="btn btn-lg btn-default" id="schueler_heute"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Heute</button>
-        <button type="button" class="btn btn-lg btn-default" id="schueler_morgen"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i> Morgen</button>
-        <button type="button" class="btn btn-lg btn-default" id="schueler_disable"><i class="fa fa-lg fa-ban" aria-hidden="true"></i> Deaktivieren</button>
+        <button type="button" class="btn btn-lg btn-default" id="schueler_heute"><i class="fa fa-lg fa-clock-o"></i> Heute</button>
+        <button type="button" class="btn btn-lg btn-default" id="schueler_morgen"><i class="fa fa-lg fa-calendar"></i> Morgen</button>
+        <button type="button" class="btn btn-lg btn-default" id="schueler_disable"><i class="fa fa-lg fa-ban"></i> Deaktivieren</button>
       </form>
     </div>
 
@@ -58,12 +59,15 @@
             <option value="{{this._id}}">{{this.filename}} <i>[{{this.forDay}}]</i></option>
           {{/each}}
         </select>
-        <button type="button" id="lehrer_delete" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-trash" aria-hidden="true"></i> Auswahl löschen</button>
+        <div>
+          <button type="button" id="lehrer_delete" class="btn btn-sm btn-danger"><i class="fa fa-lg fa-trash"></i> Auswahl löschen</button>
+          <button type="button" id="lehrer_edit" class="btn btn-sm btn-warning"><i class="fa fa-lg fa-pencil"></i> Auswahl bearbeiten</button>
+        </div>
         <br>
         <br>
-        <button type="button" class="btn btn-lg btn-default" id="lehrer_heute"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Heute</button>
-        <button type="button" class="btn btn-lg btn-default" id="lehrer_morgen"><i class="fa fa-lg fa-calendar" aria-hidden="true"></i> Morgen</button>
-        <button type="button" class="btn btn-lg btn-default" id="lehrer_disable"><i class="fa fa-lg fa-ban" aria-hidden="true"></i> Deaktivieren</button>
+        <button type="button" class="btn btn-lg btn-default" id="lehrer_heute"><i class="fa fa-lg fa-clock-o"></i> Heute</button>
+        <button type="button" class="btn btn-lg btn-default" id="lehrer_morgen"><i class="fa fa-lg fa-calendar"></i> Morgen</button>
+        <button type="button" class="btn btn-lg btn-default" id="lehrer_disable"><i class="fa fa-lg fa-ban"></i> Deaktivieren</button>
       </form>
     </div>
   </div>
@@ -113,6 +117,23 @@
   $('#lehrer_delete').click(function (event) {
     deleteVplan("lehrer");
   });
+
+  // Vplan editation handler
+  $('#schueler_edit').click(function (event) {
+    editVplan("schueler");
+  });
+
+  $('#lehrer_edit').click(function (event) {
+    editVplan("lehrer");
+  });
+
+  function editVplan(type) {
+    if (!$('#' + type + '_selection option:selected').html()) {
+      return;
+    }
+
+    location.href = location.pathname + '?p=edit&t=' + type + '&id=' + $('#' + type + '_selection option:selected').val()
+  }
 
   function deleteVplan(type) {
     if (!$('#' + type + '_selection option:selected').html()) {

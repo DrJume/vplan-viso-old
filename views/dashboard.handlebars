@@ -22,7 +22,11 @@
     {{#if (isActivePage "upload" activePage) }}
       {{> upload}}
     {{else}}
-      {{> settings}}
+      {{#if (isActivePage "settings" activePage) }}
+        {{> settings}}
+      {{else}}
+        {{> edit}}
+      {{/if}}
     {{/if}}
   {{/if}}
 

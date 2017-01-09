@@ -1,3 +1,17 @@
+// create uploads/ if not exist
+var fs = require('fs');
+if (!fs.existsSync(__dirname + "/uploads/")) {
+  console.log("Creating uploads/ directories");
+  fs.mkdir(__dirname + "/uploads/", function(){
+    fs.mkdir(__dirname + "/uploads/schueler/", function(){
+      
+    });
+    fs.mkdir(__dirname + "/uploads/lehrer/", function(){
+    
+    });
+  });
+}
+
 // config
 var config = require('./package').config;
 

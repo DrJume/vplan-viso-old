@@ -48,6 +48,7 @@ function parseLehrer(data) {
   var parsed = {};
   parsed.vplan = [];
   parsed.kopf = {};
+  parsed.aufsicht = [];
 
   data.vp.haupt[0].aktion.forEach(function (item) {
     parsed.vplan.push({
@@ -68,6 +69,10 @@ function parseLehrer(data) {
   parsed.kopf.abwesend_klassen = getDataSafe(data.vp.kopf[0].kopfinfo[0].abwesendk);
   parsed.kopf.aenderung_lehrer = getDataSafe(data.vp.kopf[0].kopfinfo[0].aenderungl);
   parsed.kopf.aenderung_klassen = getDataSafe(data.vp.kopf[0].kopfinfo[0].aenderungk);
+
+  data.vp.aufsichten[0].aufsichtzeile.forEach(function (item) {
+    parsed.aufsicht.push(item.aufsichtinfo[0]);
+  });
 
   return parsed;
 }
@@ -177,16 +182,54 @@ router.delete('/lehrer', function (req, res) {
   deleteVplan("lehrer", req, res);
 });
 
-// debug: get listed vplans
+// get vplans for id
 router.get('/schueler', function (req, res) {
-  DB.schueler.find({}, function (err, docs) {
-    res.send(docs);
+  if (!req.query.id) {
+    res.json("NO_DATA_FOUND");
+    return;
+  }
+
+  DB.schueler.findOne({ _id: req.query.id }, function (err, doc) {
+    if (err) {
+      console.log(err);
+      res.json("DB_ERROR");
+      return;
+    }
+
+    fs.readFile(__dirname + "/../uploads/schueler/" + doc.filename, function (err, data) {
+      if (err) {
+        console.log(err);
+        res.json("FILE_READ_ERROR");
+        return;
+      }
+
+      res.json(JSON.parse(data));
+    });
   });
 });
 
 router.get('/lehrer', function (req, res) {
-  DB.lehrer.find({}, function (err, docs) {
-    res.send(docs);
+  if (!req.query.id) {
+    res.json("NO_DATA_FOUND");
+    return;
+  }
+
+  DB.lehrer.findOne({ _id: req.query.id }, function (err, doc) {
+    if (err) {
+      console.log(err);
+      res.json("DB_ERROR");
+      return;
+    }
+
+    fs.readFile(__dirname + "/../uploads/lehrer/" + doc.filename, function (err, data) {
+      if (err) {
+        console.log(err);
+        res.json("FILE_READ_ERROR");
+        return;
+      }
+
+      res.json(JSON.parse(data));
+    });
   });
 });
 

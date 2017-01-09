@@ -1,0 +1,80 @@
+<div class="jumbotron">
+  <button type="button" id="save" class="btn btn-success"><i class="fa fa-lg fa-fw fa-floppy-o"></i> Übernehmen</button>
+  <br>
+  <br>
+  <table id="edit"></table>
+</div>
+
+<script type="text/javascript">
+  function urlParam(name) {
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results == null) {
+      return null;
+    }
+    else {
+      return results[1] || 0;
+    }
+  }
+
+  function save() {
+    var data = JSON.parse(
+      $('#edit').tableExport({
+      type:'json',
+      outputMode: 'string',
+      jsonScope: 'data',
+      })
+    );
+    return data;
+  }
+
+  if (!urlParam("t") || !urlParam("id")) {
+    location.href = location.pathname;
+  }
+
+  var t = urlParam("t");
+  var id = urlParam("id");
+
+  $.getJSON('/api/' + t + '?id=' + id, function (data) {
+    console.log(data);
+
+    $('#edit').bootstrapTable({
+      locale: 'de-DE',
+      stickyHeader: true,
+      reorderableRows: true,
+      data: data.vplan,
+      columns: [
+        {
+          field: 'klasse',
+          title: 'Klasse',
+          editable: true
+        },
+        {
+          field: 'stunde',
+          title: 'Stunde',
+          editable: true
+        },
+        {
+          field: 'fach',
+          title: 'Fach',
+          editable: true
+        },
+        {
+          field: 'lehrer',
+          title: 'Lehrer',
+          editable: true
+        },
+        {
+          field: 'raum',
+          title: 'Raum',
+          editable: true
+        },
+        {
+          field: 'info',
+          title: 'Beschreibung',
+          editable: true
+        }
+      ]
+    });
+  });
+
+</script>

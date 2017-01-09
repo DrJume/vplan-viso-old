@@ -15,6 +15,10 @@ var kopf = function (req, res) {
   res.render('vplan/lehrer/kopf');
 };
 
+var aufsicht = function (req, res) {
+  res.render('vplan/lehrer/aufsicht');
+};
+
 var json = function (req, res) {
   var day = req.path.split('/')[1];
 
@@ -50,7 +54,7 @@ router.get('/morgen/tabelle', tabelle);
 router.get('/heute/kopf', kopf);
 router.get('/morgen/kopf', kopf);
 
-// router.get('/heute/aufsicht', aufsicht);
-// router.get('/morgen/aufsicht', aufsicht);
+router.get('/heute/aufsicht', aufsicht);
+router.get('/morgen/aufsicht', aufsicht);
 
 module.exports = router;
