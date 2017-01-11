@@ -1,8 +1,18 @@
 <div class="jumbotron">
-  <button type="button" id="save" class="btn btn-success"><i class="fa fa-lg fa-fw fa-floppy-o"></i> Übernehmen</button>
-  <br>
-  <br>
-  <table id="edit"></table>
+  <label for="filename">Dateiname: </label>
+  <input type="text" id="filename" placeholder="Dateiname">
+  <button type="button" style="float:right;" id="save" class="btn btn-success"><i class="fa fa-lg fa-fw fa-floppy-o"></i> Übernehmen</button>
+<br>
+<br>
+<table id="edit_kopf_schueler"></table>
+<br>
+<table id="edit_vplan_schueler"></table>
+
+<table id="edit_kopf_lehrer"></table>
+<br>
+<table id="edit_vplan_lehrer"></table>
+<br>
+<table id="edit_aufsicht_lehrer"></table>
 </div>
 
 <script type="text/javascript">
@@ -16,64 +26,360 @@
     }
   }
 
-  function save() {
-    var data = JSON.parse(
-      $('#edit').tableExport({
-      type:'json',
-      outputMode: 'string',
-      jsonScope: 'data',
-      })
-    );
-    return data;
-  }
-
   if (!urlParam("t") || !urlParam("id")) {
     location.href = location.pathname;
   }
 
-  var t = urlParam("t");
+  var type = urlParam("t");
   var id = urlParam("id");
 
-  $.getJSON('/api/' + t + '?id=' + id, function (data) {
-    console.log(data);
+  $.getJSON('/api/' + type + '?id=' + id, function (res) {
+    if (res[1] == "DB_NOT_FOUND") {
+      //location.href = location.pathname;
+      return;
+    }
+    console.log(res);
+    $('#filename').val(res.filename);
 
-    $('#edit').bootstrapTable({
-      locale: 'de-DE',
-      stickyHeader: true,
-      reorderableRows: true,
-      data: data.vplan,
-      columns: [
-        {
-          field: 'klasse',
-          title: 'Klasse',
-          editable: true
-        },
-        {
-          field: 'stunde',
-          title: 'Stunde',
-          editable: true
-        },
-        {
-          field: 'fach',
-          title: 'Fach',
-          editable: true
-        },
-        {
-          field: 'lehrer',
-          title: 'Lehrer',
-          editable: true
-        },
-        {
-          field: 'raum',
-          title: 'Raum',
-          editable: true
-        },
-        {
-          field: 'info',
-          title: 'Beschreibung',
-          editable: true
+    if (type == "schueler") {
+      $('#edit_kopf_schueler').bootstrapTable({
+        locale: 'de-DE',
+        stickyHeader: false,
+        reorderableRows: false,
+        data: [res.data.kopf],
+        columns: [
+          {
+            field: 'date',
+            title: 'Datum',
+            editable: true
+          },
+          {
+            field: 'time',
+            title: 'Erstellungszeit',
+            editable: true
+          },
+          {
+            field: 'aenderung_klassen',
+            title: 'Klassen mit Änderungen',
+            editable: true
+          },
+          {
+            field: 'aenderung_lehrer',
+            title: 'Lehrer mit Änderungen',
+            editable: true
+          },
+          {
+            field: 'abwesend_lehrer',
+            title: 'Abwesende Lehrer',
+            editable: true
+          },
+        ]
+      });
+
+      $('#edit_vplan_schueler').bootstrapTable({
+        locale: 'de-DE',
+        stickyHeader: true,
+        reorderableRows: true,
+        data: res.data.vplan,
+        columns: [
+          {
+            field: 'klasse',
+            title: 'Klasse',
+            editable: true
+          },
+          {
+            field: 'stunde',
+            title: 'Stunde',
+            editable: true
+          },
+          {
+            field: 'fach',
+            title: 'Fach',
+            editable: true
+          },
+          {
+            field: 'lehrer',
+            title: 'Lehrer',
+            editable: true
+          },
+          {
+            field: 'raum',
+            title: 'Raum',
+            editable: true
+          },
+          {
+            field: 'info',
+            title: 'Beschreibung',
+            editable: true
+          }
+        ]
+      });
+
+      $('thead').dblclick(function (evt) {
+        var id = evt.delegateTarget.parentElement.id;
+        if (id == "edit_vplan_schueler") {
+          $('#' + id).bootstrapTable('insertRow', {
+            index: 0,
+            row: {
+              klasse: "",
+              stunde: "",
+              fach: "",
+              lehrer: "",
+              raum: "",
+              info: ""
+            }
+          });
+          return;
         }
-      ]
+      });
+
+      $('#edit_vplan_schueler').on('dbl-click-row.bs.table', function (row, element, field) {
+        deleteRow(field);
+      });
+
+    } else {
+      $('#edit_kopf_lehrer').bootstrapTable({
+        locale: 'de-DE',
+        stickyHeader: false,
+        reorderableRows: false,
+        data: [res.data.kopf],
+        columns: [
+          {
+            field: 'date',
+            title: 'Datum',
+            editable: true
+          },
+          {
+            field: 'time',
+            title: 'Erstellungszeit',
+            editable: true
+          },
+          {
+            field: 'abwesend_lehrer',
+            title: 'Abwesende Lehrer',
+            editable: true
+          },
+          {
+            field: 'aenderung_lehrer',
+            title: 'Lehrer mit Änderungen',
+            editable: true
+          },
+          {
+            field: 'aenderung_klassen',
+            title: 'Klassen mit Änderungen',
+            editable: true
+          },
+          {
+            field: 'abwesend_klassen',
+            title: 'Abwesende Klassen',
+            editable: true
+          }
+        ]
+      });
+
+      $('#edit_vplan_lehrer').bootstrapTable({
+        locale: 'de-DE',
+        stickyHeader: true,
+        reorderableRows: true,
+        data: res.data.vplan,
+        columns: [
+          {
+            field: 'stunde',
+            title: 'Stunde',
+            editable: true
+          },
+          {
+            field: 'fach',
+            title: 'Fach',
+            editable: true
+          },
+          {
+            field: 'lehrer',
+            title: 'Lehrer',
+            editable: true
+          },
+          {
+            field: 'klasse',
+            title: 'Klasse',
+            editable: true
+          },
+          {
+            field: 'vfach',
+            title: 'Vertretungs-Fach',
+            editable: true
+          },
+          {
+            field: 'vlehrer',
+            title: 'Vertretungs-Lehrer',
+            editable: true
+          },
+          {
+            field: 'vraum',
+            title: 'Vertretungs-Raum',
+            editable: true
+          },
+          {
+            field: 'info',
+            title: 'Beschreibung',
+            editable: true
+          }
+        ]
+      });
+
+      $('#edit_aufsicht_lehrer').bootstrapTable({
+        locale: 'de-DE',
+        stickyHeader: false,
+        reorderableRows: true,
+        data: res.data.aufsicht,
+        columns: [
+          {
+            field: 'info',
+            title: 'Beschreibung',
+            editable: true
+          }
+        ]
+      });
+
+      $('thead').dblclick(function (evt) {
+        var id = evt.delegateTarget.parentElement.id;
+        if (id == "edit_vplan_lehrer") {
+          $('#' + id).bootstrapTable('insertRow', {
+            index: 0,
+            row: {
+              stunde: "",
+              fach: "",
+              lehrer: "",
+              klasse: "",
+              vfach: "",
+              vlehrer: "",
+              vraum: "",
+              info: ""
+            }
+          });
+          return;
+        }
+        if (id == "edit_aufsicht_lehrer") {
+          $('#' + id).bootstrapTable('insertRow', {
+            index: 0,
+            row: {
+              info: ""
+            }
+          });
+          return;
+        }
+      });
+
+      $('#edit_aufsicht_lehrer').on('dbl-click-row.bs.table', function (row, element, field) {
+        deleteRow(field);
+      });
+
+      $('#edit_vplan_lehrer').on('dbl-click-row.bs.table', function (row, element, field) {
+        deleteRow(field);
+      });
+    }
+
+    function deleteRow(field) {
+      var deleteBool = confirm("Soll die Zeile gelöscht werden?");
+      if (deleteBool) {
+        field.remove();
+      }
+    }
+
+    function tableToJson(table) {
+      var data = [];
+
+      var headers = [];
+      for (var i = 0; i < table.rows[0].cells.length; i++) {
+        headers[i] = table.rows[0].cells[i].children[0].innerHTML.toLowerCase().replace(/ /gi, '');
+        switch (headers[i]) {
+          case "beschreibung": {
+            headers[i] = "info";
+            break;
+          }
+          case "datum": {
+            headers[i] = "date";
+            break;
+          }
+          case "erstellungszeit": {
+            headers[i] = "time";
+            break;
+          }
+          case "abwesendelehrer": {
+            headers[i] = "abwesend_lehrer";
+            break;
+          }
+          case "abwesendeklassen": {
+            headers[i] = "abwesend_klassen";
+            break;
+          }
+          case "klassenmitänderungen": {
+            headers[i] = "aenderung_klassen";
+            break;
+          }
+          case "lehrermitänderungen": {
+            headers[i] = "aenderung_lehrer";
+            break;
+          }
+          case "vertretungs-fach": {
+            headers[i] = "vfach";
+            break;
+          }
+          case "vertretungs-lehrer": {
+            headers[i] = "vlehrer";
+            break;
+          }
+          case "vertretungs-raum": {
+            headers[i] = "vraum";
+            break;
+          }
+
+        }
+      }
+
+      for (var i = 1; i < table.rows.length; i++) {
+        var tableRow = table.rows[i];
+        var rowData = {};
+
+        for (var j = 0; j < tableRow.cells.length; j++) {
+          rowData[headers[j]] = $(tableRow.cells[j].innerHTML)[0].innerText;
+          if (rowData[headers[j]] == "(Leer)") {
+            rowData[headers[j]] = "";
+          }
+        }
+
+        data.push(rowData);
+      }
+
+      return data;
+    }
+
+    $('#save').click(function () {
+      var data;
+      if (type == "schueler") {
+        data = {
+          id: id,
+          filename: $('#filename').val(),
+          data: {
+            vplan: tableToJson($('#edit_vplan_schueler')[0]),
+            kopf: tableToJson($('#edit_kopf_schueler')[0])[0]
+          }
+        };
+      } else {
+        data = {
+          id: id,
+          filename: $('#filename').val(),
+          data: {
+            vplan: tableToJson($('#edit_vplan_lehrer')[0]),
+            kopf: tableToJson($('#edit_kopf_lehrer')[0])[0],
+            aufsicht: tableToJson($('#edit_aufsicht_lehrer')[0])
+          }
+        };
+      }
+
+      console.log(data);
+      $.post('/api/' + type, data, function (res) {
+        console.log(res);
+      });
     });
   });
 

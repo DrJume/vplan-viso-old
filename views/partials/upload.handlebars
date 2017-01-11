@@ -30,7 +30,7 @@
     // Wrong file-type handler (just xml allowed)
     if (file.name.split('.')[file.name.split('.').length-1] != 'xml') {
       showModal(["ERROR", "Falscher Datei-Typ (nicht .xml)"], function() {
-
+        location.reload(true);
       });
       return;
     }

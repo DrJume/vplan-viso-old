@@ -17,10 +17,11 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title"><span id="successTitle"></span></h4>
+				<h4 class="modal-title"><span id="successHeader"></span></h4>
 			</div>
 			<div class="modal-body">
-				<p><span id="successBody"></span></p>
+				<p><span id="successTitle"></span></p>
+				<span id="successBody"></span>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-success" data-dismiss="modal" id="ok">OK</button>
@@ -38,10 +39,11 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title"><span id="errorTitle"></span></h4>
+				<h4 class="modal-title"><span id="errorHeader"></span></h4>
 			</div>
 			<div class="modal-body">
-				<p><span id="errorBody"></span></p>
+				<p><span id="errorTitle"></span></p>
+				<span id="errorBody"></span>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal" id="ok">OK</button>
@@ -72,8 +74,9 @@
 	function showModal(res, cb) {
 		switch (res[0]) {
 			case "SUCCESS": {
-				$('#successTitle').html("Erfolgreich");
-				$('#successBody').html(res[1]);
+				$('#successHeader').html("Erfolgreich");
+				$('#successTitle').html(res[1]);
+				$('#successBody').html(res[2]);
 				$('#successModal').modal('show');
 				$('#successModal').on('hidden.bs.modal', function (e) {
 					cb();
@@ -81,8 +84,9 @@
 				break;
 			}
 			case "ERROR": {
-				$('#errorTitle').html("Fehler");
-				$('#errorBody').html(res[1]);
+				$('#errorHeader').html("Fehler");
+				$('#errorTitle').html(res[1]);
+				$('#errorBody').html(res[2]);
 				$('#errorModal').modal('show');
 				$('#errorModal').on('hidden.bs.modal', function (e) {
 					cb();
@@ -90,7 +94,7 @@
 				break;
 			}
 			default: {
-				console.log("UNKNOWN_RESPONSE_TYPE");
+				console.log("NO_MODAL_NEEDED");
 				return;
 			}
 		}

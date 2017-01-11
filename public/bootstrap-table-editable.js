@@ -110,8 +110,7 @@
             if (!column.editable) {
                 return;
             }
-
-            that.$body.find('a[data-name="' + column.field + '"]').editable(column.editable)
+            that.$body.find('a[data-name="' + column.field + '"]').editable({type: "textarea"})
                 .off('save').on('save', function(e, params) {
                     var data = that.getData(),
                         index = $(this).parents('tr[data-index]').data('index'),
@@ -123,7 +122,7 @@
                     that.trigger('editable-save', column.field, row, oldValue, $(this));
                     that.resetFooter();
                 });
-            that.$body.find('a[data-name="' + column.field + '"]').editable(column.editable)
+            that.$body.find('a[data-name="' + column.field + '"]').editable({type: "textarea"})
                 .off('shown').on('shown', function(e, editable) {
                     var data = that.getData(),
                         index = $(this).parents('tr[data-index]').data('index'),
@@ -131,7 +130,7 @@
 
                     that.trigger('editable-shown', column.field, row, $(this), editable);
                 });
-            that.$body.find('a[data-name="' + column.field + '"]').editable(column.editable)
+            that.$body.find('a[data-name="' + column.field + '"]').editable({type: "textarea"})
                 .off('hidden').on('hidden', function(e, reason) {
                     var data = that.getData(),
                         index = $(this).parents('tr[data-index]').data('index'),

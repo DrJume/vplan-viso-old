@@ -22,7 +22,7 @@
 
       // [STYLING] fa-size
       $.each(data.aufsicht, function (i, item) {
-        $('<li>').html(item.replace("-->", "<i class='fa fa-fw fa-lg fa-arrow-right'></i>")).appendTo('ul');
+        $('<li>').html(item.info.replace("-->", "<i class='fa fa-fw fa-lg fa-arrow-right'></i>")).appendTo('ul');
       });
     });
   });

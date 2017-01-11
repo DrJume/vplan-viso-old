@@ -4,7 +4,7 @@ var fs = require('fs');
 var DB = require('../modules/DB-Connection.js');
 
 router.get('/', function (req, res) {
-  res.send("Lehrer");
+  res.json("Lehrer");
 });
 
 var tabelle = function (req, res) {

@@ -5,7 +5,17 @@ var DB = require('../modules/DB-Connection.js');
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
 var moment = require('moment');
+moment.defineLocale('de-custom', {
+  monthsShort: "Jan_Feb_März_Apr_Mai_Jun_Jul_Aug_Sept_Okt_Nov_Dez".split("_"),
+  parentLocale: 'de'
+});
+moment().locale('de-custom').format();
 var ReloadSocket = require('../modules/ReloadSocket.js');
+
+function Fehler(res, err, title) {
+  res.json(["ERROR", title, err]);
+  console.log(err);
+}
 
 function getDataSafe(data) {
   if (data[0]._ === undefined) {
@@ -71,7 +81,9 @@ function parseLehrer(data) {
   parsed.kopf.aenderung_klassen = getDataSafe(data.vp.kopf[0].kopfinfo[0].aenderungk);
 
   data.vp.aufsichten[0].aufsichtzeile.forEach(function (item) {
-    parsed.aufsicht.push(item.aufsichtinfo[0]);
+    parsed.aufsicht.push({
+      info: item.aufsichtinfo[0]
+    });
   });
 
   return parsed;
@@ -80,13 +92,13 @@ function parseLehrer(data) {
 // vplan upload route
 router.post('/', function (req, res) {
   if (!req.body.data || !req.body.filename) {
-    res.send(["ERROR", "NO_FILE"]);
+    res.json(["ERROR", "NO_FILE"]);
     return;
   }
 
   parser.parseString(req.body.data, function (err, result) {
     if (err) {
-      console.log(err);
+      Fehler(res, err, "Fehler beim Übersetzen des XML-Formats");
       return;
     }
 
@@ -98,7 +110,7 @@ router.post('/', function (req, res) {
       type = "schueler";
     } else {
       // Unknown xml structure
-      res.send(["ERROR", "Unbekannte Datenstruktur"]);
+      res.json(["ERROR", "Unbekannte Datenstruktur"]);
       return;
     }
 
@@ -116,11 +128,11 @@ router.post('/', function (req, res) {
       newFileName.pop();
     }
     newFileName.join('.');
-    newFileName = moment().format("D_MM_YYYY H_mm") + ' - ' + newFileName + ".json";
+    newFileName = moment().locale('de-custom').format("dd D_MMM H_mm_ss") + ' - ' + newFileName + ".json";
 
     fs.writeFile(__dirname + '/../uploads/' + type + '/' + newFileName, JSON.stringify(data), function (err) {
       if (err) {
-        console.log(err);
+        Fehler(res, err, "Fehler beim Schreiben der Datei");
         return;
       }
 
@@ -129,11 +141,11 @@ router.post('/', function (req, res) {
         forDay: ""
       }, function (err) {
         if (err) {
-          console.log(err);
+          Fehler(res, err, "Datenbankfehler");
           return;
         }
 
-        res.send(["SUCCESS", "Datei hochgeladen"]);
+        res.json(["SUCCESS", "Datei hochgeladen"]);
       });
     });
   });
@@ -142,31 +154,34 @@ router.post('/', function (req, res) {
 
 function deleteVplan(type, req, res) {
   if (!req.body.id) {
-    res.send(["ERROR", "Keine Datei ausgewählt"]);
+    res.json(["ERROR", "Keine Datei ausgewählt"]);
     return;
   }
 
   DB[type].findOne({ _id: req.body.id }, function (err, doc) {
+    if (err) {
+      Fehler(res, err, "Datenbankfehler");
+      return;
+    }
+
     if (!doc) {
-      res.send(["ERROR", "Auswahl existiert nicht"]);
+      res.json(["ERROR", "Auswahl existiert nicht"]);
       return;
     }
 
     fs.unlink(__dirname + "/../uploads/" + type + '/' + doc.filename, function (err) {
       if (err) {
-        res.send(["ERROR", err]);
-        console.log(err);
+        Fehler(res, err, "Fehler beim Löschen der Datei");
         return;
       }
 
       DB[type].remove({ _id: req.body.id }, function (err) {
         if (err) {
-          res.send(["ERROR", err]);
-          console.log(err);
+          Fehler(res, err, "Datenbankfehler");
           return;
         }
 
-        res.send(["SUCCESS", "Auswahl gelöscht"]);
+        res.json(["SUCCESS", "Auswahl gelöscht"]);
         ReloadSocket(type);
       });
     });
@@ -182,82 +197,132 @@ router.delete('/lehrer', function (req, res) {
   deleteVplan("lehrer", req, res);
 });
 
-// get vplans for id
-router.get('/schueler', function (req, res) {
-  if (!req.query.id) {
-    res.json("NO_DATA_FOUND");
+// vplan edit (update, new) route
+
+function updateVplan(type, req, res) {
+  if (!req.body.data || !req.body.filename || !req.body.id) {
     return;
   }
 
-  DB.schueler.findOne({ _id: req.query.id }, function (err, doc) {
-    if (err) {
-      console.log(err);
-      res.json("DB_ERROR");
+  DB[type].findOne({ _id: req.body.id }, function (err, doc) {
+    if (!doc) {
+      res.json(["ERROR", "Auswahl existiert nicht"]);
       return;
     }
 
-    fs.readFile(__dirname + "/../uploads/schueler/" + doc.filename, function (err, data) {
+    if (err) {
+      Fehler(res, err, "Datenbankfehler");
+      return;
+    }
+
+    fs.unlink(__dirname + "/../uploads/" + type + '/' + doc.filename, function (err) {
       if (err) {
-        console.log(err);
-        res.json("FILE_READ_ERROR");
+        Fehler(res, err, "Fehler beim Löschen der Datei");
         return;
       }
 
-      res.json(JSON.parse(data));
+      var newFileName = moment().locale('de-custom').format("dd D_MMM H_mm_ss") + ' - ' + req.body.filename + ".json";
+
+      fs.writeFile(__dirname + '/../uploads/' + type + '/' + newFileName, JSON.stringify(req.body.data), function (err) {
+        if (err) {
+          Fehler(res, err, "Fehler beim Schreiben der Datei");
+          return;
+        }
+
+        DB[type].update({ _id: doc._id }, { $set: { filename: newFileName } }, function (err) {
+          if (err) {
+            Fehler(res, err, "Datenbankfehler");
+            return;
+          }
+
+          res.json(["SUCCESS", "Vertretungsplan aktualisiert"]);
+          ReloadSocket(type);
+        });
+      });
     });
   });
+}
+
+router.post('/schueler', function (req, res) {
+  updateVplan("schueler", req, res);
+});
+
+router.post('/lehrer', function (req, res) {
+  updateVplan("lehrer", req, res);
+});
+
+// get vplans for id
+
+function getVplan(type, req, res) {
+  if (!req.query.id) {
+    DB[type].find({}, function (err, docs) {
+      if (err) {
+        Fehler(res, err, "Datenbankfehler");
+        return;
+      }
+
+      res.json(docs);
+    });
+
+    return;
+  }
+
+  DB[type].findOne({ _id: req.query.id }, function (err, doc) {
+    if (err) {
+      Fehler(res, err, "Datenbankfehler");
+      return;
+    }
+
+    if (!doc) {
+      res.json(["ERROR", "DB_NOT_FOUND"]);
+      return;
+    }
+
+    fs.readFile(__dirname + "/../uploads/" + type + "/" + doc.filename, function (err, data) {
+      if (err) {
+        Fehler(res, err, "Fehler beim Lesen der Datei");
+        return;
+      }
+
+      res.json({
+        filename: doc.filename.replace(doc.filename.split(" - ", 1) + " - ", "").split(".json")[0],
+        data: JSON.parse(data)
+      });
+    });
+  });
+}
+
+router.get('/schueler', function (req, res) {
+  getVplan("schueler", req, res);
 });
 
 router.get('/lehrer', function (req, res) {
-  if (!req.query.id) {
-    res.json("NO_DATA_FOUND");
-    return;
-  }
-
-  DB.lehrer.findOne({ _id: req.query.id }, function (err, doc) {
-    if (err) {
-      console.log(err);
-      res.json("DB_ERROR");
-      return;
-    }
-
-    fs.readFile(__dirname + "/../uploads/lehrer/" + doc.filename, function (err, data) {
-      if (err) {
-        console.log(err);
-        res.json("FILE_READ_ERROR");
-        return;
-      }
-
-      res.json(JSON.parse(data));
-    });
-  });
+  getVplan("lehrer", req, res);
 });
 
 
 function selectVplan(type, req, res) {
-  if (!req.body.id || req.body.forDay === undefined) {
-    res.send(["ERROR", "Keine Datei ausgewählt"]);
+  if (!req.body.id || !req.body.forDay) {
+    res.json(["ERROR", "Keine Datei ausgewählt"]);
     return;
   }
 
   DB[type].update({ forDay: req.body.forDay }, { $set: { forDay: "" } }, function (err) {
     if (err) {
-      res.send(["ERROR", err]);
-      console.log(err);
+      Fehler(res, err, "Datenbankfehler");
       return;
     }
 
     DB[type].update({ _id: req.body.id }, { $set: { forDay: req.body.forDay } }, function (err) {
       if (err) {
-        res.send(["ERROR", err]);
-        console.log(err);
+        Fehler(res, err, "Datenbankfehler");
         return;
       }
 
       if (req.body.forDay) {
-        res.send(["SUCCESS", "Auswahl für " + req.body.forDay + " aktiviert"]);
+        res.json(["SUCCESS", "Auswahl für " + req.body.forDay + " aktiviert"]);
       } else {
-        res.send(["SUCCESS", "Auswahl deaktiviert"]);
+        res.json(["SUCCESS", "Auswahl deaktiviert"]);
       }
       ReloadSocket(type);
     });

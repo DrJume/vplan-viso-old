@@ -16,11 +16,11 @@ router.put('/', function (req, res) {
   }, {}, function (err) {
     if (err) {
       console.log(err);
-      res.send(["ERROR", "Speicherung der Einstellungen fehlgeschlagen"]);
+      res.json(["ERROR", "Speicherung der Einstellungen fehlgeschlagen"]);
       return;
     }
     
-    res.send(["SUCCESS", "Einstellungen übernommen"]);
+    res.json(["SUCCESS", "Einstellungen übernommen"]);
     ReloadSocket("all");
   });
 });
