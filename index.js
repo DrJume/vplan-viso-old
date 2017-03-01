@@ -27,7 +27,6 @@ var DB = require('./modules/DB-Connection.js');
 DB.settings.findOne({}, function (err, doc) {
   if (doc === null) {
     DB.settings.insert({
-      displayAmount: 20,
       displayTime: {
         "0-25": 3,
         "25-50": 6,

@@ -6,7 +6,6 @@ var ReloadSocket = require('../modules/ReloadSocket.js');
 // settings update route
 router.put('/', function (req, res) {
   DB.settings.update({}, {
-    displayAmount: parseInt(req.body.displayAmount),
     displayTime: {
       "0-25": parseFloat(req.body.displayTime['0-25']),
       "25-50": parseFloat(req.body.displayTime['25-50']),

@@ -1,41 +1,77 @@
-<!-- [STYLING]  -->
-<table hidden id="vplan" style="color: black;" class="table table-striped">
-  <th>Stunde</th>
-  <th>Fach</th>
-  <th>Lehrer</th>
-  <th>Klasse</th>
-  <th>VFach</th>
-  <th>VLehrer</th>
-  <th>VRaum</th>
-  <th>Beschreibung</th>
+<style>
+  body {
+    overflow: hidden;
+  }
+
+  .table-striped>tbody>tr:nth-of-type(even) {
+    background-color: #f9f9f9;
+  }
+
+  .table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #ffffff;
+  }
+
+  .table-striped>tbody>tr:nth-child(3)>td {
+    border-top-color: #6e6e6e;
+  }
+</style>
+
+<table hidden id="vplan" style="color: black; font-size: 20px;" class="table table-striped">
+  <tr style="background-color: #f9f9f9;">
+    <th colspan="4">Unterrichtsstunde</th>
+    <th colspan="4">Änderung</th>
+  </tr>
+
+  <tr>
+    <th>Stunde</th>
+    <th>Fach</th>
+    <th>Lehrer</th>
+    <th>Klasse/Kurs</th>
+    <th>Fach</th>
+    <th>Lehrer</th>
+    <th>Raum</th>
+    <th>Info</th>
+  </tr>
+  
 </table>
 
 <script type="text/javascript">
-  function calcDisplayTime(amount, settings) {
-    if (amount / settings.displayAmount <= 0.25) {
+  function calcDisplayTime(tableProportion, settings) {
+    if (tableProportion <= 0.25) {
       return settings.displayTime['0-25'];
-    } else if (amount / settings.displayAmount <= 0.5) {
+    } else if (tableProportion <= 0.5) {
       return settings.displayTime['25-50'];
-    } else if (amount / settings.displayAmount <= 0.75) {
+    } else if (tableProportion <= 0.75) {
       return settings.displayTime['50-75'];
-    } else if (amount / settings.displayAmount <= 1) {
+    } else if (tableProportion <= 1) {
       return settings.displayTime['75-100'];
     }
   }
 
   function loop(data, settings, cycle) {
+    $('table').attr('hidden');
+
     $("tr[data]").remove();
 
     $.each(data.vplan, function (i, item) {
-      if ((i + 1) > cycle + settings.displayAmount || (i + 1) <= cycle) {
+      if ((i + 1) <= cycle || $('table').height() > $(window).height()) {
         return;
       }
 
-      $('<tr data>').html("<td>" + item.stunde + "</td><td>" + item.fach + "</td><td>" + item.lehrer + "</td>" + "</td><td>" + item.klasse + "</td>" + "</td><td>" + item.vfach + "</td>" + "</td><td>" + item.vlehrer + "</td>" + "</td><td>" + item.vraum + "</td>" + "</td><td>" + item.info + "</td>").appendTo('#vplan');
+      var newRow = $('<tr data>').html("<td>" + item.stunde + "</td><td>" + item.fach + "</td><td>" + item.lehrer + "</td>" + "</td><td>" + item.klasse + "</td>" + "</td><td>" + item.vfach + "</td>" + "</td><td>" + item.vlehrer + "</td>" + "</td><td>" + item.vraum + "</td>" + "</td><td>" + item.info + "</td>");
+      newRow.appendTo('#vplan');
+
+      if ($('table').height() > $(window).height()) {
+        newRow.remove();
+      }
     });
 
-    var displayTime = calcDisplayTime($("tr[data]").length, settings) * 1000;
+    $('table').removeAttr('hidden');
 
+    var tableProportion = $('table').height() / $(window).height();
+    console.log(tableProportion * 100 + "%");
+
+    var displayTime = calcDisplayTime(tableProportion, settings) * 1000;
     console.log("displayTime: " + displayTime + " ms");
 
     setTimeout(function () {
@@ -46,6 +82,7 @@
       loop(data, settings, (cycle + $("tr[data]").length));
     }, displayTime);
   }
+
 
 
   console.log('/' + location.pathname.split('/')[1] + '/' + location.pathname.split('/')[2]);
@@ -59,11 +96,7 @@
       return;
     }
 
-    console.log("/settings");
-
     $.getJSON("/settings", function (settings) {
-      $('table').removeAttr('hidden');
-
       console.log(settings);
 
       var cycle = 0;

@@ -302,7 +302,7 @@ router.get('/lehrer', function (req, res) {
 
 
 function selectVplan(type, req, res) {
-  if (!req.body.id || !req.body.forDay) {
+  if (!req.body.id || req.body.forDay === undefined) {
     res.json(["ERROR", "Keine Datei ausgewählt"]);
     return;
   }
