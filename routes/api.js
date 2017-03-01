@@ -18,6 +18,8 @@ function Fehler(res, err, title) {
 }
 
 function getDataSafe(data) {
+  if (!data) return "";
+
   if (data[0]._ === undefined) {
     if (data[0].$ !== undefined) {
       return "";

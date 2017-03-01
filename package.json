@@ -2,14 +2,16 @@
   "name": "manos_vplan",
   "config" : {
     "ip": "localhost",
-    "app_port": 80,
-    "socket_port": 8080
+    "app_port": 8080,
+    "socket_port": 8081
   },
   "version": "1.0.0",
   "description": "Vertretungsplan CMS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js -i .json -e .handlebars,.js",
+    "reset": "rm -rf db/ uploads/"
   },
   "author": "DrJume",
   "license": "ISC",

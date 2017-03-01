@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<vp>
+  <kopf>
+    <datei>VPlanLehrer.xml</datei>
+    <titel>Freitag, 13. Januar 2017 (A-Woche)</titel>
+    <schulname>Martin-Andersen-Nexö-Gymnasium Dresden</schulname>
+    <datum>01.03.2017, 13:07</datum>
+    <kopfinfo>
+      <abwesendl>Gos; Hof; Knö; Mei; Rau; ScA (4.-12.Stunde); Sen</abwesendl>
+      <aenderungl>Ber; Gol; Got; Gru; Hen; Hff; Hof; Keg; Kip; Köh; Kra; Kru; Nen; Pla; Rau; ScA; Sch; Sck; Tho; Ulb; Wad; Wal; Wei; Wol</aenderungl>
+      <aenderungk>10a, 10b, 10c, 5a, 5b, 5c, 6b, 6c, 7a, 7b, 8a, 8c, 9a, 9b, 9c, JG11, JG12, MANOS</aenderungk>
+    </kopfinfo>
+  </kopf>
+  <freietage>
+    <ft>160801</ft>
+    <ft>160802</ft>
+    <ft>160803</ft>
+    <ft>160804</ft>
+    <ft>160805</ft>
+    <ft>161003</ft>
+    <ft>161004</ft>
+    <ft>161005</ft>
+    <ft>161006</ft>
+    <ft>161007</ft>
+    <ft>161010</ft>
+    <ft>161011</ft>
+    <ft>161012</ft>
+    <ft>161013</ft>
+    <ft>161014</ft>
+    <ft>161031</ft>
+    <ft>161116</ft>
+    <ft>161223</ft>
+    <ft>161226</ft>
+    <ft>161227</ft>
+    <ft>161228</ft>
+    <ft>161229</ft>
+    <ft>161230</ft>
+    <ft>170102</ft>
+    <ft>170213</ft>
+    <ft>170214</ft>
+    <ft>170215</ft>
+    <ft>170216</ft>
+    <ft>170217</ft>
+    <ft>170220</ft>
+    <ft>170221</ft>
+    <ft>170222</ft>
+    <ft>170223</ft>
+    <ft>170224</ft>
+    <ft>170413</ft>
+    <ft>170414</ft>
+    <ft>170417</ft>
+    <ft>170418</ft>
+    <ft>170419</ft>
+    <ft>170420</ft>
+    <ft>170421</ft>
+    <ft>170501</ft>
+    <ft>170525</ft>
+    <ft>170526</ft>
+    <ft>170605</ft>
+    <ft>170626</ft>
+    <ft>170627</ft>
+    <ft>170628</ft>
+    <ft>170629</ft>
+    <ft>170630</ft>
+    <ft>170703</ft>
+    <ft>170704</ft>
+    <ft>170705</ft>
+    <ft>170706</ft>
+    <ft>170707</ft>
+    <ft>170710</ft>
+    <ft>170711</ft>
+    <ft>170712</ft>
+    <ft>170713</ft>
+    <ft>170714</ft>
+    <ft>170717</ft>
+    <ft>170718</ft>
+    <ft>170719</ft>
+    <ft>170720</ft>
+    <ft>170721</ft>
+    <ft>170724</ft>
+    <ft>170725</ft>
+    <ft>170726</ft>
+    <ft>170727</ft>
+    <ft>170728</ft>
+    <ft>170731</ft>
+  </freietage>
+  <haupt>
+    <aktion>
+      <stunde>1</stunde>
+      <fach>EN</fach>
+      <lehrer>Ber</lehrer>
+      <klasse>9a</klasse>
+      <vfach>---</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>---</vraum>
+      <info>gehalten am Do (12.01.) St.5</info>
+    </aktion>
+    <aktion>
+      <stunde>1</stunde>
+      <fach>CH</fach>
+      <lehrer>Rau</lehrer>
+      <klasse>JG11/ ch1</klasse>
+      <vfach>CH</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>311</vraum>
+      <info>selbst.</info>
+    </aktion>
+    <aktion>
+      <stunde>2</stunde>
+      <fach>CH</fach>
+      <lehrer>Rau</lehrer>
+      <klasse>JG11/ ch1</klasse>
+      <vfach>CH</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>311</vraum>
+      <info>selbst.</info>
+    </aktion>
+    <aktion>
+      <stunde>3</stunde>
+      <fach>EN</fach>
+      <lehrer>Keg</lehrer>
+      <klasse>6b</klasse>
+      <vfach>---</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>---</vraum>
+      <info>gehalten am Do (12.01.) St.6</info>
+    </aktion>
+    <aktion>
+      <stunde>3</stunde>
+      <fach>GEO</fach>
+      <lehrer>ScA</lehrer>
+      <klasse>10b</klasse>
+      <vfach>---</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>---</vraum>
+      <info>gehalten am Do (12.01.) St.5</info>
+    </aktion>
+    <aktion>
+      <stunde>5</stunde>
+      <fach>DE</fach>
+      <lehrer>Gos</lehrer>
+      <klasse>JG12/ de2</klasse>
+      <vfach>DE</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>019</vraum>
+      <info>selbst., bitte Aufgaben erteilen</info>
+    </aktion>
+    <aktion>
+      <stunde>6</stunde>
+      <fach>DE</fach>
+      <lehrer>Gos</lehrer>
+      <klasse>JG12/ de2</klasse>
+      <vfach>DE</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>019</vraum>
+      <info>selbst., bitte Aufgaben erteilen</info>
+    </aktion>
+    <aktion>
+      <stunde>6</stunde>
+      <fach>BIO</fach>
+      <lehrer>Rau</lehrer>
+      <klasse>5a</klasse>
+      <vfach>BIO</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>319</vraum>
+      <info>selbst.</info>
+    </aktion>
+    <aktion>
+      <stunde>6</stunde>
+      <fach>GEO</fach>
+      <lehrer>Hof</lehrer>
+      <klasse>5b</klasse>
+      <vfach>---</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>---</vraum>
+      <info>gehalten am Mi (11.01.) St.6</info>
+    </aktion>
+    <aktion>
+      <stunde>7</stunde>
+      <fach>MA</fach>
+      <lehrer>Knö</lehrer>
+      <klasse>10b</klasse>
+      <vfach>MA</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>214</vraum>
+      <info>selbst.</info>
+    </aktion>
+    <aktion>
+      <stunde>7</stunde>
+      <fach>MA</fach>
+      <lehrer>Wei</lehrer>
+      <klasse>9c</klasse>
+      <vfach>---</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>---</vraum>
+      <info>gehalten am Di (10.01.) St.3</info>
+    </aktion>
+    <aktion>
+      <stunde>7</stunde>
+      <fach>GEO</fach>
+      <lehrer>Hof</lehrer>
+      <klasse>9a</klasse>
+      <vfach>---</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>---</vraum>
+      <info>gehalten am Mi (11.01.) St.4</info>
+    </aktion>
+    <aktion>
+      <stunde>8</stunde>
+      <fach>KL</fach>
+      <lehrer>Köh</lehrer>
+      <klasse>9b</klasse>
+      <vfach>---</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>---</vraum>
+      <info>gehalten am Do (12.01.) St.7</info>
+    </aktion>
+    <aktion>
+      <stunde>8</stunde>
+      <fach>MA</fach>
+      <lehrer>Knö</lehrer>
+      <klasse>10b</klasse>
+      <vfach>MA</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>214</vraum>
+      <info>selbst.</info>
+    </aktion>
+    <aktion>
+      <stunde>8</stunde>
+      <fach>DE</fach>
+      <lehrer>Ulb</lehrer>
+      <klasse>10a</klasse>
+      <vfach>---</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>---</vraum>
+      <info>gehalten am Do (12.01.) St.1</info>
+    </aktion>
+    <aktion>
+      <stunde>8</stunde>
+      <fach>GEO</fach>
+      <lehrer>Hof</lehrer>
+      <klasse>9c</klasse>
+      <vfach>---</vfach>
+      <vlehrer>---</vlehrer>
+      <vraum>---</vraum>
+      <info>gehalten am Do (12.01.) St.4</info>
+    </aktion>
+    <aktion>
+      <stunde>6</stunde>
+      <fach>---</fach>
+      <lehrer>---</lehrer>
+      <klasse>5b</klasse>
+      <vfach>EN</vfach>
+      <vlehrer>Ber</vlehrer>
+      <vraum>120</vraum>
+      <info>statt Mi (11.01.) St.6</info>
+    </aktion>
+    <aktion>
+      <stunde>3</stunde>
+      <fach>---</fach>
+      <lehrer>---</lehrer>
+      <klasse>10b</klasse>
+      <vfach>PH</vfach>
+      <vlehrer>Gol</vlehrer>
+      <vraum>407</vraum>
+      <info>statt Do (12.01.) St.1</info>
+    </aktion>
+    <aktion>
+      <stunde>4</stunde>
+      <fach>PHA</fach>
+      <lehrer>Gol</lehrer>
+      <klasse>10b</klasse>
+      <vfach>PH</vfach>
+      <vlehrer>Gol</vlehrer>
+      <vraum>407</vraum>
+      <info>gesamte Klasse 10b</info>
+    </aktion>
+    <aktion>
+      <stunde>5</stunde>
+      <fach>PHA</fach>
+      <lehrer>Gol</lehrer>
+      <klasse>10b</klasse>
+      <vfach>PH</vfach>
+      <vlehrer>Gol</vlehrer>
+      <vraum>407</vraum>
+      <info>gesamte Klasse 10b</info>
+    </aktion>
+    <aktion>
+      <stunde>4</stunde>
+      <fach>GE</fach>
+      <lehrer>Gos</lehrer>
+      <klasse>9b</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Gos)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>7</stunde>
+      <fach>DAZ</fach>
+      <lehrer>Gos</lehrer>
+      <klasse>MANOS</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Gos)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>4</stunde>
+      <fach>---</fach>
+      <lehrer>---</lehrer>
+      <klasse>6b</klasse>
+      <vfach>KU</vfach>
+      <vlehrer>Got</vlehrer>
+      <vraum>208</vraum>
+      <info>statt Do (12.01.) St.6</info>
+    </aktion>
+    <aktion>
+      <stunde>4</stunde>
+      <fach>---</fach>
+      <lehrer>---</lehrer>
+      <klasse>9a</klasse>
+      <vfach>ETH</vfach>
+      <vlehrer>Gru</vlehrer>
+      <vraum>220</vraum>
+      <info>statt Mi (11.01.) St.4</info>
+    </aktion>
+    <aktion>
+      <stunde>7</stunde>
+      <fach>PH</fach>
+      <lehrer>Hen</lehrer>
+      <klasse>8c</klasse>
+      <vfach>PH</vfach>
+      <vlehrer>Hen</vlehrer>
+      <vraum>407</vraum>
+      <info>verlegt nach St.2</info>
+    </aktion>
+    <aktion>
+      <stunde>3</stunde>
+      <fach>MA</fach>
+      <lehrer>Kip</lehrer>
+      <klasse>8a</klasse>
+      <vfach>MA</vfach>
+      <vlehrer>Kip</vlehrer>
+      <vraum>203</vraum>
+      <info>verlegt nach St.4</info>
+    </aktion>
+    <aktion>
+      <stunde>7</stunde>
+      <fach>MU</fach>
+      <lehrer>Kra</lehrer>
+      <klasse>9b</klasse>
+      <vfach>MU</vfach>
+      <vlehrer>Kra</vlehrer>
+      <vraum>206,317</vraum>
+      <info>verlegt nach St.4</info>
+    </aktion>
+    <aktion>
+      <stunde>5</stunde>
+      <fach>CHA</fach>
+      <lehrer>Kru</lehrer>
+      <klasse>7b</klasse>
+      <vfach>CH</vfach>
+      <vlehrer>Kru</vlehrer>
+      <vraum>311</vraum>
+      <info>gesamte Klasse 7b</info>
+    </aktion>
+    <aktion>
+      <stunde>6</stunde>
+      <fach>CHA</fach>
+      <lehrer>Kru</lehrer>
+      <klasse>7b</klasse>
+      <vfach>CH</vfach>
+      <vlehrer>Kru</vlehrer>
+      <vraum>311</vraum>
+      <info>gesamte Klasse 7b</info>
+    </aktion>
+    <aktion>
+      <stunde>2</stunde>
+      <fach>BIO</fach>
+      <lehrer>Sen</lehrer>
+      <klasse>5c</klasse>
+      <vfach>DE</vfach>
+      <vlehrer>Köh</vlehrer>
+      <vraum>121</vraum>
+      <info>bitte Absprache mit Frau Michel</info>
+    </aktion>
+    <aktion>
+      <stunde>4</stunde>
+      <fach>GEO</fach>
+      <lehrer>Hof</lehrer>
+      <klasse>7b</klasse>
+      <vfach>DE</vfach>
+      <vlehrer>Köh</vlehrer>
+      <vraum>106</vraum>
+      <info></info>
+    </aktion>
+    <aktion>
+      <stunde>1</stunde>
+      <fach>MA</fach>
+      <lehrer>Mei</lehrer>
+      <klasse>8c</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Mei)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>2</stunde>
+      <fach>MA</fach>
+      <lehrer>Mei</lehrer>
+      <klasse>8c</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Mei)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>4</stunde>
+      <fach>BIO</fach>
+      <lehrer>Mei</lehrer>
+      <klasse>7a</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Mei)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>5</stunde>
+      <fach>MAA</fach>
+      <lehrer>Mei</lehrer>
+      <klasse>7b</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Mei)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>6</stunde>
+      <fach>MAA</fach>
+      <lehrer>Mei</lehrer>
+      <klasse>7b</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Mei)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>7</stunde>
+      <fach>BIO</fach>
+      <lehrer>Mei</lehrer>
+      <klasse>6c</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Mei)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>7</stunde>
+      <fach>---</fach>
+      <lehrer>---</lehrer>
+      <klasse>9b</klasse>
+      <vfach>FR</vfach>
+      <vlehrer>Nen</vlehrer>
+      <vraum>007</vraum>
+      <info>statt Do (12.01.) St.7</info>
+    </aktion>
+    <aktion>
+      <stunde>6</stunde>
+      <fach>MA</fach>
+      <lehrer>Pla</lehrer>
+      <klasse>7a</klasse>
+      <vfach>MA</vfach>
+      <vlehrer>Pla</vlehrer>
+      <vraum>122</vraum>
+      <info>verlegt nach St.3</info>
+    </aktion>
+    <aktion>
+      <stunde>4</stunde>
+      <fach>CHA</fach>
+      <lehrer>Rau</lehrer>
+      <klasse>10b</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Rau)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>5</stunde>
+      <fach>CHA</fach>
+      <lehrer>Rau</lehrer>
+      <klasse>10b</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Rau)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>3</stunde>
+      <fach>FR</fach>
+      <lehrer>Sch</lehrer>
+      <klasse>7a</klasse>
+      <vfach>FR</vfach>
+      <vlehrer>Sch</vlehrer>
+      <vraum>122</vraum>
+      <info>verlegt nach St.4</info>
+    </aktion>
+    <aktion>
+      <stunde>4</stunde>
+      <fach>FR</fach>
+      <lehrer>Sch</lehrer>
+      <klasse>8a</klasse>
+      <vfach>FR</vfach>
+      <vlehrer>Sch</vlehrer>
+      <vraum>203</vraum>
+      <info>verlegt nach St.3</info>
+    </aktion>
+    <aktion>
+      <stunde>5</stunde>
+      <fach>BIO</fach>
+      <lehrer>Sen</lehrer>
+      <klasse>10c</klasse>
+      <vfach>BIO</vfach>
+      <vlehrer>Sck</vlehrer>
+      <vraum>319</vraum>
+      <info></info>
+    </aktion>
+    <aktion>
+      <stunde>1</stunde>
+      <fach>BIO</fach>
+      <lehrer>Sen</lehrer>
+      <klasse>9c</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Sen)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>4</stunde>
+      <fach>BIO</fach>
+      <lehrer>Sen</lehrer>
+      <klasse>9a</klasse>
+      <vfach>---</vfach>
+      <vlehrer>(Sen)</vlehrer>
+      <vraum>---</vraum>
+      <info>fällt aus</info>
+    </aktion>
+    <aktion>
+      <stunde>1</stunde>
+      <fach>---</fach>
+      <lehrer>---</lehrer>
+      <klasse>9a</klasse>
+      <vfach>PH</vfach>
+      <vlehrer>Tho</vlehrer>
+      <vraum>404</vraum>
+      <info>statt Do (12.01.) St.5</info>
+    </aktion>
+    <aktion>
+      <stunde>4</stunde>
+      <fach>FR</fach>
+      <lehrer>Wal</lehrer>
+      <klasse>6b</klasse>
+      <vfach>FR</vfach>
+      <vlehrer>Wal</vlehrer>
+      <vraum>213</vraum>
+      <info>verlegt nach St.3</info>
+    </aktion>
+  </haupt>
+  <aufsichten>
+    <aufsichtzeile>
+      <aufsichtinfo>09:10:  Frühstück - FrühHofTH  --&gt;  Hff (für Rau)</aufsichtinfo>
+    </aufsichtzeile>
+    <aufsichtzeile>
+      <aufsichtinfo>12:05:  Mittag 1 - Mitt EG  --&gt;  entfällt (Hof)</aufsichtinfo>
+    </aufsichtzeile>
+  </aufsichten>
+</vp>
