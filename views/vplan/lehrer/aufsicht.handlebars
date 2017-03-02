@@ -1,7 +1,21 @@
-<!-- [STYLING] -->
-<h3>Geänderte Aufsichten:	</h3>
+<style>
+  h3, table {
+    text-align: center;
+  }
+  tr {
+    font-size: 17px;
+  }
+  .fa {
+    font-size: 17px;
+  }
+  #aufsicht > tbody > tr:nth-child(1) {
+    background-color: #ebebeb;
+  }
+</style>
 
-<ul style="color: black;"></ul>
+<table style="color: black;" class="table" id="aufsicht">
+  <th><h3>Geänderte Aufsichten</h3></th>
+</table>
 
 
 <script type="text/javascript">
@@ -20,9 +34,8 @@
     $.getJSON("/settings", function (settings) {
       console.log(settings);
 
-      // [STYLING] fa-size
       $.each(data.aufsicht, function (i, item) {
-        $('<li>').html(item.info.replace("-->", "<i class='fa fa-fw fa-lg fa-arrow-right'></i>")).appendTo('ul');
+        $('<tr>').html($('<td>').html(item.info.replace("-->", "<i class='fa fa-fw fa-lg fa-arrow-right'></i>"))).appendTo('#aufsicht'); 
       });
     });
   });
