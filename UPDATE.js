@@ -43,6 +43,7 @@ function response(res) {
     var readableTagName = "";
     readableTagName = res.tag_name.slice(1);
     readableTagName = readableTagName.split('-')[0];
+    console.log(readableTagName + " neuer als " + data + " ? --> " + isNewerVersion(readableTagName, data));
     if (isNewerVersion(readableTagName, data)) {
       console.log("Eine neue Version des Systems ist verfügbar.\nDas Update wird nun installiert...");
       doTheUpdateProcess(res.tarball_url, res.tag_name.slice(1));
@@ -83,48 +84,22 @@ function doTheUpdateProcess(tarball_url, neu_ver) {
 }
 
 function isNewerVersion(neu, derzeit) {
-  var result = versionCompare(neu, derzeit);
-  if (result > 0) {
+  if (versionCompare(neu, derzeit) > 0) {
     return true;
   }
   return false;
 }
 
-
-function versionCompare(v1, v2, options) {
-  var lexicographical = options && options.lexicographical,
-    zeroExtend = options && options.zeroExtend,
-    v1parts = v1.split('.'),
-    v2parts = v2.split('.');
-
-  function isValidPart(x) {
-    return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
-  }
-  if (!v1parts.every(isValidPart) || !v2parts.every(isValidPart)) {
-    return NaN;
-  }
-  if (zeroExtend) {
-    while (v1parts.length < v2parts.length) v1parts.push("0");
-    while (v2parts.length < v1parts.length) v2parts.push("0");
-  }
-  if (!lexicographical) {
-    v1parts = v1parts.map(Number);
-    v2parts = v2parts.map(Number);
-  }
-  for (var i = 0; i < v1parts.length; ++i) {
-    if (v2parts.length == i) {
-      return 1;
-    }
-    if (v1parts[i] == v2parts[i]) {
-      continue;
-    } else if (v1parts[i] > v2parts[i]) {
-      return 1;
-    } else {
-      return -1;
-    }
-  }
-  if (v1parts.length != v2parts.length) {
-    return -1;
+function versionCompare(neu, derzeit) {
+  var pa = neu.split('.');
+  var pb = derzeit.split('.');
+  for (var i = 0; i < 3; i++) {
+    var na = Number(pa[i]);
+    var nb = Number(pb[i]);
+    if (na > nb) return 1;
+    if (nb > na) return -1;
+    if (!isNaN(na) && isNaN(nb)) return 1;
+    if (isNaN(na) && !isNaN(nb)) return -1;
   }
   return 0;
-}
+};
