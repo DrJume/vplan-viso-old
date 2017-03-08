@@ -43,10 +43,8 @@ function response(res) {
     var readableTagName = "";
     readableTagName = res.tag_name.slice(1);
     readableTagName = readableTagName.split('-')[0];
-    console.log(readableTagName);
-    console.log(data);
-    console.log(isNewerVersion(readableTagName, data));
     if (isNewerVersion(readableTagName, data)) {
+      console.log("Eine neue Version des Systems ist verfügbar.\nDas Update wird nun installiert...");
       doTheUpdateProcess(res.tarball_url, res.tag_name.slice(1));
     }
   });
@@ -61,21 +59,22 @@ function doTheUpdateProcess(tarball_url, neu_ver) {
       console.error(error);
       return;
     }
+    console.log("Das Update wird herunterladen...");
     shell('wget -qO- ' + tarball_url + ' | tar xvz -C ../' + newFolderName + ' --strip-components 1', function (error, stdout, stderr) {
       if (error) {
         console.error(error);
         return;
       }
+      console.log("Es wird versucht das alte System abzuschalten...");
       shell('npm stop', function (error, stdout, stderr) {
         if (error) {
           console.error(error);
           return;
         }
-        console.log("Alte Version wird heruntergefahren...");
+        console.log("Starten der Nach-Update Prozedur...");
         shell('node POST_UPDATE.js', {
           cwd: __dirname + "/../" + newFolderName + '/'
         }, function (error, stdout, stderr) {
-          console.log("Starten der Nach-Update prozedur...");
           console.log(stdout);
         });
       });
