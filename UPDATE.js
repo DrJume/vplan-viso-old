@@ -76,6 +76,7 @@ function doTheUpdateProcess(tarball_url, neu_ver) {
           cwd: __dirname + "/../" + newFolderName + '/'
         }, function (error, stdout, stderr) {
           console.log("Starten der Nach-Update prozedur...");
+          console.log(stdout);
         });
       });
     });
