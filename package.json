@@ -10,7 +10,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall" : "sudo npm install pm2 -g && node CRON.js && echo -e '\\033[5;91m\\033[1;91m\\033[4;91m\n[ACHTUNG!]\n\\033[0m\\033[4;91mManosVplan erfolgreich installiert!\nBitte fügen Sie noch die Port-Daten in die package.json-Datei ein.\\033[0m'",
+    "postinstall" : "sudo npm install pm2 -g && sudo node CRON.js && echo -e '\\033[5;91m\\033[1;91m\\033[4;91m\n[ACHTUNG!]\n\\033[0m\\033[4;91mManosVplan erfolgreich installiert!\nBitte fügen Sie noch die Port-Daten in die package.json-Datei ein.\\033[0m'",
     "debug-start": "nodemon index.js -i .json -e .handlebars,.js",
     "start" : "pm2 start index.js --name \"manosVplan\"",
     "stop" : "pm2 stop manosVplan",
