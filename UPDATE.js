@@ -5,7 +5,7 @@ const shell = require('child_process').exec;
 var options = {
   hostname: 'api.github.com',
   port: 443,
-  path: '/repos/DrJume/manosVplan/releases',
+  path: '/repos/DrJume/manosVplan/releases/latest',
   method: 'GET',
   headers: {
     "User-Agent": "DrJume"
@@ -23,7 +23,7 @@ var req = https.request(options, function (res) {
       console.log("API hat nicht mit 200 (OK) geantwortet!");
       return;
     }
-    response(JSON.parse(str)[0]);
+    response(JSON.parse(str));
   });
 });
 
