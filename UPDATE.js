@@ -70,7 +70,6 @@ function doTheUpdateProcess(tarball_url, neu_ver) {
       shell('npm stop', function (error, stdout, stderr) {
         if (error) {
           console.error(error);
-          return;
         }
         console.log("Starten der Nach-Update Prozedur...");
         shell('node POST_UPDATE.js', {
