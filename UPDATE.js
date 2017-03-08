@@ -47,7 +47,7 @@ function response(res) {
     console.log(data);
     console.log(isNewerVersion(readableTagName, data));
     if (isNewerVersion(readableTagName, data)) {
-      doTheUpdateProcess(res.tarball_url, res.tag_name);
+      doTheUpdateProcess(res.tarball_url, res.tag_name.slice(1));
     }
   });
 }
