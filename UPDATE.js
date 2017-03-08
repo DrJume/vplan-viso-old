@@ -71,10 +71,11 @@ function doTheUpdateProcess(tarball_url, neu_ver) {
           console.error(error);
           return;
         }
+        console.log("Alte Version wird heruntergefahren...");
         shell('node POST_UPDATE.js', {
           cwd: __dirname + "/../" + newFolderName + '/'
         }, function (error, stdout, stderr) {
-          console.log("Fertig mit alter Version!");
+          console.log("Starten der Nach-Update prozedur...");
         });
       });
     });
