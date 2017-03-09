@@ -1,7 +1,7 @@
 {
   "name": "manos_vplan",
   "config" : {
-    "ip": "192.168.1.23",
+    "ip": "localhost",
     "app_port": 8080,
     "socket_port": 8081
   },
