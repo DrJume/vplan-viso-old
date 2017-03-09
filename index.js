@@ -85,7 +85,7 @@ app.use(bodyParser.json());
 app.use('/public', express.static('public'));
 
 // move up schedule at 2:00 (AM)
-var moveUpVplan = nodeSchedule.scheduleJob('* 2 0 0 0', function () {
+var moveUpVplan = nodeSchedule.scheduleJob('0 2 * * *', function () {
   console.log("Vertretungsplan-Tagesanpassung um 2 Uhr");
 
   DB.schueler.update({ forDay: "heute" }, { $set: { forDay: "" } }, function (err) {

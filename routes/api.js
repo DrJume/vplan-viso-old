@@ -82,11 +82,13 @@ function parseLehrer(data) {
   parsed.kopf.aenderung_lehrer = getDataSafe(data.vp.kopf[0].kopfinfo[0].aenderungl);
   parsed.kopf.aenderung_klassen = getDataSafe(data.vp.kopf[0].kopfinfo[0].aenderungk);
 
-  data.vp.aufsichten[0].aufsichtzeile.forEach(function (item) {
-    parsed.aufsicht.push({
-      info: item.aufsichtinfo[0]
+  if (data.vp.aufsichten !== undefined) {
+    data.vp.aufsichten[0].aufsichtzeile.forEach(function (item) {
+      parsed.aufsicht.push({
+        info: item.aufsichtinfo[0]
+      });
     });
-  });
+  }
 
   return parsed;
 }
@@ -160,7 +162,9 @@ function deleteVplan(type, req, res) {
     return;
   }
 
-  DB[type].findOne({ _id: req.body.id }, function (err, doc) {
+  DB[type].findOne({
+    _id: req.body.id
+  }, function (err, doc) {
     if (err) {
       Fehler(res, err, "Datenbankfehler");
       return;
@@ -177,7 +181,9 @@ function deleteVplan(type, req, res) {
         return;
       }
 
-      DB[type].remove({ _id: req.body.id }, function (err) {
+      DB[type].remove({
+        _id: req.body.id
+      }, function (err) {
         if (err) {
           Fehler(res, err, "Datenbankfehler");
           return;
@@ -206,7 +212,9 @@ function updateVplan(type, req, res) {
     return;
   }
 
-  DB[type].findOne({ _id: req.body.id }, function (err, doc) {
+  DB[type].findOne({
+    _id: req.body.id
+  }, function (err, doc) {
     if (!doc) {
       res.json(["ERROR", "Auswahl existiert nicht"]);
       return;
@@ -231,7 +239,13 @@ function updateVplan(type, req, res) {
           return;
         }
 
-        DB[type].update({ _id: doc._id }, { $set: { filename: newFileName } }, function (err) {
+        DB[type].update({
+          _id: doc._id
+        }, {
+          $set: {
+            filename: newFileName
+          }
+        }, function (err) {
           if (err) {
             Fehler(res, err, "Datenbankfehler");
             return;
@@ -269,7 +283,9 @@ function getVplan(type, req, res) {
     return;
   }
 
-  DB[type].findOne({ _id: req.query.id }, function (err, doc) {
+  DB[type].findOne({
+    _id: req.query.id
+  }, function (err, doc) {
     if (err) {
       Fehler(res, err, "Datenbankfehler");
       return;
@@ -309,13 +325,25 @@ function selectVplan(type, req, res) {
     return;
   }
 
-  DB[type].update({ forDay: req.body.forDay }, { $set: { forDay: "" } }, function (err) {
+  DB[type].update({
+    forDay: req.body.forDay
+  }, {
+    $set: {
+      forDay: ""
+    }
+  }, function (err) {
     if (err) {
       Fehler(res, err, "Datenbankfehler");
       return;
     }
 
-    DB[type].update({ _id: req.body.id }, { $set: { forDay: req.body.forDay } }, function (err) {
+    DB[type].update({
+      _id: req.body.id
+    }, {
+      $set: {
+        forDay: req.body.forDay
+      }
+    }, function (err) {
       if (err) {
         Fehler(res, err, "Datenbankfehler");
         return;
