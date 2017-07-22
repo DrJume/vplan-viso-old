@@ -1,6 +1,7 @@
-const https = require('https');
-const fs = require('fs');
-const shell = require('child_process').exec;
+const https = require('https')
+const fs = require('fs')
+const path = require('path')
+const shell = require('child_process').exec
 
 var options = {
   hostname: 'api.github.com',
@@ -8,97 +9,97 @@ var options = {
   path: '/repos/DrJume/manosVplan/releases/latest',
   method: 'GET',
   headers: {
-    "User-Agent": "DrJume"
+    'User-Agent': 'DrJume'
   }
-};
+}
 
-var str = "";
+var str = ''
 
 var req = https.request(options, function (res) {
   res.on('data', (chunk) => {
-    str += chunk;
-  });
+    str += chunk
+  })
   res.on('end', function () {
     if (!(res.statusCode == 200)) {
-      console.log("API hat nicht mit 200 (OK) geantwortet!");
-      return;
+      console.log('API hat nicht mit 200 (OK) geantwortet!')
+      return
     }
-    response(JSON.parse(str));
-  });
-});
+    response(JSON.parse(str))
+  })
+})
 
 req.on('error', (e) => {
-  console.error(e);
-});
-req.end();
+  console.error(e)
+})
+req.end()
 
-function response(res) {
-  console.log(res);
-  fs.readFile(__dirname + "/VERSION", 'utf-8', function (err, data) {
+function response (res) {
+  console.log(res)
+  fs.readFile(path.join(__dirname, '/VERSION'), 'utf-8', function (err, data) {
     if (err) {
-      console.error("Derzeitige Version konnte nicht gelesen werden!");
-      console.error(err);
-      return;
+      console.error('Derzeitige Version konnte nicht gelesen werden!')
+      console.error(err)
+      return
     }
-    var readableTagName = "";
-    readableTagName = res.tag_name.slice(1);
-    readableTagName = readableTagName.split('-')[0];
-    console.log(readableTagName + " neuer als " + data + " ? --> " + isNewerVersion(readableTagName, data));
+    var readableTagName = ''
+    readableTagName = res.tag_name.slice(1)
+    readableTagName = readableTagName.split('-')[0]
+    console.log(readableTagName + ' neuer als ' + data + ' ? --> ' + isNewerVersion(readableTagName, data))
     if (isNewerVersion(readableTagName, data)) {
-      console.log("Eine neue Version des Systems ist verfügbar.\nDas Update wird nun installiert...");
-      doTheUpdateProcess(res.tarball_url, res.tag_name.slice(1));
+      console.log('Eine neue Version des Systems ist verfügbar.\nDas Update wird nun installiert...')
+      doTheUpdateProcess(res.tarball_url, res.tag_name.slice(1))
     }
-  });
+  })
 }
 
-function doTheUpdateProcess(tarball_url, neu_ver) {
-  const newFolderName = "manosVplan-" + neu_ver;
+function doTheUpdateProcess (tarball_url, neu_ver) {
+  const newFolderName = 'manosVplan-' + neu_ver
   shell('mkdir ' + newFolderName, {
-    cwd: __dirname + "/../"
+    cwd: path.join(__dirname, '/../')
   }, function (error, stdout, stderr) {
     if (error) {
-      console.error(error);
-      return;
+      console.error(error)
+      return
     }
-    console.log("Das Update wird herunterladen...");
+    console.log('Das Update wird herunterladen...')
     shell('wget -qO- ' + tarball_url + ' | tar xvz -C ../' + newFolderName + ' --strip-components 1', function (error, stdout, stderr) {
       if (error) {
-        console.error(error);
-        return;
+        console.error(error)
+        return
       }
-      console.log("Es wird versucht das alte System abzuschalten...");
+      console.log('Es wird versucht das alte System abzuschalten...')
       shell('npm stop', function (error, stdout, stderr) {
         if (error) {
-          console.error(error);
+          console.error(error)
         }
-        console.log("Starten der Nach-Update Prozedur...");
+        console.log('Starten der Nach-Update Prozedur...')
         shell('node POST_UPDATE.js', {
-          cwd: __dirname + "/../" + newFolderName + '/'
+          cwd: path.join(__dirname, '/../', newFolderName, '/')
         }, function (error, stdout, stderr) {
-          console.log(stdout);
-        });
-      });
-    });
-  });
+          console.log(stdout)
+        })
+      })
+    })
+  })
 }
 
-function isNewerVersion(neu, derzeit) {
+function isNewerVersion (neu, derzeit) {
   if (versionCompare(neu, derzeit) > 0) {
-    return true;
+    return true
   }
-  return false;
+  return false
 }
 
-function versionCompare(neu, derzeit) {
-  var pa = neu.split('.');
-  var pb = derzeit.split('.');
+function versionCompare (neu, derzeit) {
+  var pa = neu.split('.')
+  var pb = derzeit.split('.')
   for (var i = 0; i < 3; i++) {
-    var na = Number(pa[i]);
-    var nb = Number(pb[i]);
-    if (na > nb) return 1;
-    if (nb > na) return -1;
-    if (!isNaN(na) && isNaN(nb)) return 1;
-    if (isNaN(na) && !isNaN(nb)) return -1;
+    var na = Number(pa[i])
+    var nb = Number(pb[i])
+    if (na > nb) return 1
+    if (nb > na) return -1
+    if (!isNaN(na) && isNaN(nb)) return 1
+    if (isNaN(na) && !isNaN(nb)) return -1
   }
-  return 0;
+  return 0
 };
