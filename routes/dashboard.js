@@ -1,10 +1,11 @@
-var express = require('express')
-var router = express.Router()
-var DB = require('../modules/DB-Connection.js')
+const express = require('express')
+const DB = require('../modules/DB-Connection.js')
+
+const router = express.Router()
 
 // dashboard view route
-router.get('/', function (req, res) {
-  var activePage = ''
+router.get('/', (req, res) => {
+  let activePage = ''
 
   switch (req.query.p) {
     case undefined: {
@@ -33,26 +34,26 @@ router.get('/', function (req, res) {
     }
   }
 
-  DB.schueler.find({}, function (err, schueler) {
+  DB.schueler.find({}, (err, schueler) => {
     if (err) {
       console.log(err)
       return
     }
-    DB.lehrer.find({}, function (err, lehrer) {
+    DB.lehrer.find({}, (err, lehrer) => {
       if (err) {
         console.log(err)
         return
       }
-      DB.settings.findOne({}, function (err, settings) {
+      DB.settings.findOne({}, (err, settings) => {
         if (err) {
           console.log(err)
           return
         }
         res.render('dashboard', {
-          activePage: activePage,
-          schueler: schueler,
-          lehrer: lehrer,
-          settings: settings
+          activePage,
+          schueler,
+          lehrer,
+          settings,
         })
       })
     })

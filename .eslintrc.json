@@ -2,6 +2,8 @@
     "extends": "airbnb",
     "rules": {
         "semi": ["error", "never"],
-        "no-shadow": ["warn", { "allow": ["err"] }]
+        "no-shadow": ["warn", { "allow": ["err", "error", "stdout", "stderr"] }],
+        "no-console": "off",
+        "no-underscore-dangle": ["error", { "allow": ["_id"] }]
     }
 }

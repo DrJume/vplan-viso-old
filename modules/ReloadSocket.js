@@ -1,13 +1,13 @@
-var config = require('.././package').config
+const config = require('.././package').config
 
-var server = require('http').createServer()
-var io = require('socket.io')(server)
+const server = require('http').createServer()
+const io = require('socket.io')(server)
 
 server.listen(config.socket_port)
 
-var reload = function (type) {
+const reload = (type) => {
   io.emit('reload', {
-    type: type
+    type,
   })
 }
 

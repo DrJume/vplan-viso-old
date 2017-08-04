@@ -1,25 +1,26 @@
-var express = require('express')
-var router = express.Router()
-var fs = require('fs')
-var path = require('path')
-var DB = require('../modules/DB-Connection.js')
+const express = require('express')
+const fs = require('fs')
+const path = require('path')
+const DB = require('../modules/DB-Connection.js')
 
-router.get('/', function (req, res) {
+const router = express.Router()
+
+router.get('/', (req, res) => {
   res.json('Schueler')
 })
 
-var tabelle = function (req, res) {
+const tabelle = (req, res) => {
   res.render('vplan/schueler/tabelle')
 }
 
-var kopf = function (req, res) {
+const kopf = (req, res) => {
   res.render('vplan/schueler/kopf')
 }
 
-var json = function (req, res) {
-  var day = req.path.split('/')[1]
+const json = (req, res) => {
+  const day = req.path.split('/')[1]
 
-  DB.schueler.findOne({ forDay: day }, function (err, doc) {
+  DB.schueler.findOne({ forDay: day }, (err, doc) => {
     if (err) {
       console.log(err)
       return
@@ -30,7 +31,7 @@ var json = function (req, res) {
       return
     }
 
-    fs.readFile(path.join(__dirname, '/../uploads/schueler/', doc.filename), function (err, data) {
+    fs.readFile(path.join(__dirname, '/../uploads/schueler/', doc.filename), (err, data) => {
       if (err) {
         console.log(err)
         return
