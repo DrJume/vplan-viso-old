@@ -1,31 +1,34 @@
 // create uploads/ if not exist
-var fs = require('fs')
-var path = require('path')
+const fs = require('fs')
+const path = require('path')
+
 if (!fs.existsSync(__dirname, '/uploads/')) {
   console.log('Creating uploads/ directories')
-  fs.mkdir(path.join(__dirname, '/uploads/'), function () {
-    fs.mkdir(path.join(__dirname, '/uploads/schueler/'), function () {
+  fs.mkdir(path.join(__dirname, '/uploads/'), () => {
+    fs.mkdir(path.join(__dirname, '/uploads/schueler/'), () => {
 
     })
-    fs.mkdir(path.join(__dirname, '/uploads/lehrer/'), function () {
+    fs.mkdir(path.join(__dirname, '/uploads/lehrer/'), () => {
 
     })
   })
 }
 
 // config
-var config = require('./package').config
+const config = require('./package').config
 
 // view middleware
-var express = require('express')
-var exphbs = require('express-handlebars')
-var bodyParser = require('body-parser')
-var favicon = require('serve-favicon')
-var app = express()
+const express = require('express')
+const exphbs = require('express-handlebars')
+const bodyParser = require('body-parser')
+const favicon = require('serve-favicon')
+
+const app = express()
 
 // storage middleware
-var DB = require('./modules/DB-Connection.js')
-DB.settings.findOne({}, function (err, doc) {
+const DB = require('./modules/DB-Connection.js')
+
+DB.settings.findOne({}, (err, doc) => {
   if (err) {
     console.log(err)
     return
@@ -36,9 +39,9 @@ DB.settings.findOne({}, function (err, doc) {
         '0-25': 3,
         '25-50': 6,
         '50-75': 8,
-        '75-100': 12
-      }
-    }, function (err) {
+        '75-100': 12,
+      },
+    }, (err) => {
       if (err) {
         console.log(err)
       }
@@ -47,31 +50,30 @@ DB.settings.findOne({}, function (err, doc) {
 })
 
 // scheduling middleware
-var nodeSchedule = require('node-schedule')
+const nodeSchedule = require('node-schedule')
 
 // router middleware
-var settings = require('./routes/settings')
-var dashboard = require('./routes/dashboard')
-var api = require('./routes/api')
-var schueler = require('./routes/schueler')
-var lehrer = require('./routes/lehrer')
+const settings = require('./routes/settings')
+const dashboard = require('./routes/dashboard')
+const api = require('./routes/api')
+const schueler = require('./routes/schueler')
+const lehrer = require('./routes/lehrer')
 
 // Handlebars engine initialisation
-var hbs = exphbs.create({
+const hbs = exphbs.create({
   defaultLayout: 'main',
   // Specify helpers which are only registered on this instance.
   helpers: {
-    isActivePage: function (page, activePage) {
+    isActivePage(page, activePage) {
       if (page === activePage) {
         return 'active'
-      } else {
-        return ''
       }
+      return ''
     },
-    socketUrl: function () {
-      return 'http://' + config.ip + ':' + config.socket_port
-    }
-  }
+    socketUrl() {
+      return `http://${config.ip}:${config.socket_port}`
+    },
+  },
 })
 app.engine('handlebars', hbs.engine)
 app.set('view engine', 'handlebars')
@@ -88,16 +90,16 @@ app.use(bodyParser.json())
 app.use('/public', express.static('public'))
 
 // move up schedule at 2:00 (AM)
-var moveUpVplan = nodeSchedule.scheduleJob('0 2 * * *', function () {
+const moveUpVplan = nodeSchedule.scheduleJob('0 2 * * *', () => {
   console.log('Vertretungsplan-Tagesanpassung um 2 Uhr')
 
-  DB.schueler.update({ forDay: 'heute' }, { $set: { forDay: '' } }, function (err) {
+  DB.schueler.update({ forDay: 'heute' }, { $set: { forDay: '' } }, (err) => {
     if (err) {
       console.log(err)
       return
     }
 
-    DB.schueler.update({ forDay: 'morgen' }, { $set: { forDay: 'heute' } }, function (err) {
+    DB.schueler.update({ forDay: 'morgen' }, { $set: { forDay: 'heute' } }, (err) => {
       if (err) {
         console.log(err)
         return
@@ -107,13 +109,13 @@ var moveUpVplan = nodeSchedule.scheduleJob('0 2 * * *', function () {
     })
   })
 
-  DB.lehrer.update({ forDay: 'heute' }, { $set: { forDay: '' } }, function (err) {
+  DB.lehrer.update({ forDay: 'heute' }, { $set: { forDay: '' } }, (err) => {
     if (err) {
       console.log(err)
       return
     }
 
-    DB.lehrer.update({ forDay: 'morgen' }, { $set: { forDay: 'heute' } }, function (err) {
+    DB.lehrer.update({ forDay: 'morgen' }, { $set: { forDay: 'heute' } }, (err) => {
       if (err) {
         console.log(err)
         return
@@ -126,7 +128,7 @@ var moveUpVplan = nodeSchedule.scheduleJob('0 2 * * *', function () {
 
 // app routes
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   res.render('about')
 })
 
@@ -147,11 +149,11 @@ app.use('/schueler', schueler)
 app.use('/lehrer', lehrer)
 
 // display a not found page
-app.get('*', function (req, res) {
+app.get('*', (req, res) => {
   res.redirect('/')
 })
 
 // app start
-app.listen(config.app_port, function () {
-  console.log('ManosVplan listening on port ' + config.app_port + '!')
+app.listen(config.app_port, () => {
+  console.log(`ManosVplan listening on port ${config.app_port}!`)
 })

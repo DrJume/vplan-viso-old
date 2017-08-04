@@ -32,8 +32,6 @@ Temporary Items
 
 # Created by https://www.gitignore.io/api/code,node,windows
 
-.eslintrc.json
-
 ### Code ###
 # Visual Studio Code - https://code.visualstudio.com/
 .settings/

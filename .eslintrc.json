@@ -1,0 +1,7 @@
+{
+    "extends": "airbnb",
+    "rules": {
+        "semi": ["error", "never"],
+        "no-shadow": ["warn", { "allow": ["err"] }]
+    }
+}
