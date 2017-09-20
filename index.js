@@ -50,7 +50,7 @@ DB.settings.findOne({}, (err, doc) => {
 })
 
 // scheduling middleware
-const nodeSchedule = require('node-schedule')
+const cron = require('node-cron')
 
 // router middleware
 const settings = require('./routes/settings')
@@ -89,9 +89,9 @@ app.use(bodyParser.json())
 // API for public assets
 app.use('/public', express.static('public'))
 
-// move up schedule at 2:00 (AM)
-const moveUpVplan = nodeSchedule.scheduleJob('0 2 * * *', () => {
-  console.log('Vertretungsplan-Tagesanpassung um 2 Uhr')
+// move up schedule at 2:00 (AM) at weekdays
+cron.schedule('0 2 * * 1-5', () => {
+  console.log('Vertretungsplan-Tagesanpassung um 2 Uhr an Wochentagen')
 
   DB.schueler.update({ forDay: 'heute' }, { $set: { forDay: '' } }, (err) => {
     if (err) {
