@@ -115,7 +115,6 @@ router.post('/', (req, res) => {
     } else if (result.vp.haupt[0].aktion[0].raum) {
       type = 'schueler'
     } else {
-      // Unknown xml structure
       res.json(['ERROR', 'Unbekannte Datenstruktur'])
       return
     }

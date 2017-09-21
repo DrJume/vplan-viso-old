@@ -12,7 +12,6 @@
 {{> actionModals}}
 
 <script type="text/javascript">
-
   // Form submittion handler
   $('form').submit(function (evt) {
     evt.preventDefault();
@@ -21,15 +20,15 @@
     var file = $('input:file').get()[0].files[0];
 
     if (!file) {
-      showModal(["ERROR", "Keine Datei ausgewählt"], function() {
+      showModal(["ERROR", "Keine Datei ausgewählt"], function () {
 
       });
       return;
     }
 
     // Wrong file-type handler (just xml allowed)
-    if (file.name.split('.')[file.name.split('.').length-1] != 'xml') {
-      showModal(["ERROR", "Falscher Datei-Typ (nicht .xml)"], function() {
+    if (file.name.split('.')[file.name.split('.').length - 1] != 'xml') {
+      showModal(["ERROR", "Falscher Datei-Typ (nicht .xml)"], function () {
         location.reload(true);
       });
       return;
@@ -52,4 +51,5 @@
 
     fileReader.readAsText(file);
   });
+
 </script>

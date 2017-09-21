@@ -2,6 +2,7 @@
   var socket = io.connect("{{socketUrl}}");
   socket.on('reload', function (data) {
     if (data.type == "all" || data.type == location.pathname.split('/')[1])
-    location.reload(true);
+      location.reload(true);
   });
+
 </script>
