@@ -6,8 +6,8 @@ const moment = require('moment')
 
 const sendPushover = () => {
   const postBody = querystring.stringify({
-    token: 'a7d78cherf7xjw8cyzb5ohjeck4fzi',
-    user: 'uosg3juoskcsjpfhiw7htjjn8iejyg',
+    token: '',
+    user: '',
     message: `System successfully updated!\n${moment().format('dddd, MMMM Do YYYY, h:mm:ss a')}`,
   })
 
